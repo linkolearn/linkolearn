@@ -1,4 +1,3 @@
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -118,19 +117,9 @@ shopyo.db
 *.bat
 *.vbs
 
-#migrations
-migrations/
-
-#vscode
+# vscode
 .vscode
 workspace.code-workspace
-
-#uploads
-shopyo/static/uploads/products/
-shopyo/static/uploads/images/
-shopyo/static/uploads/thumbs/
-shopyo/static/uploads/category/
-shopyo/static/uploads/subcategory/
 
 # modules in static since present in modules
 shopyo/static/modules/
