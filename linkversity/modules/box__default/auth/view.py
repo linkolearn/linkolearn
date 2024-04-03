@@ -47,14 +47,18 @@ def register():
     context = {}
     reg_form = RegistrationForm()
     if request.method == 'POST':
+
         if reg_form.validate_on_submit():
+            print('3')
             password = reg_form.password.data
             username = reg_form.username.data
             if not username.replace('-', '').isalnum():
+                print('4.1')
                 flash('')
                 flash(notify_warning('Username must have only alphanumeric and - characters'))
                 return redirect(url_for('www.index'))
             if username.lower() in ['contact', 'about', 'privacy-policy']:
+                print('4.2')
                 flash('')
                 flash(notify_warning('Username must cannot be in reserved keywords'))
                 return redirect(url_for('www.index'))
@@ -62,6 +66,7 @@ def register():
                 func.lower(User.username) == func.lower(username)
                 ).first()
             if (not user is None):
+                print('4.3')
                 flash('')
                 flash(notify_warning('Username exists'))
                 return redirect(url_for('www.index'))
@@ -69,6 +74,7 @@ def register():
                 password=password,
                 username=username
                 )
+            print('4.4')
             login_user(user)
 
             is_disabled = False
@@ -77,10 +83,12 @@ def register():
                 is_disabled = current_app.config["EMAIL_CONFIRMATION_DISABLED"]
 
             if is_disabled is True:
+                print('4.5')
                 user.is_email_confirmed = True
                 user.email_confirm_date = datetime.datetime.now()
                 user.update()
                 return redirect(url_for('www.user_profile', username=username))
+            return redirect(url_for('www.index'))
         else:
             return redirect(url_for('www.index'))
                 # if "next" not in request.form:
