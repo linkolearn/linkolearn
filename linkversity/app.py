@@ -272,3 +272,5 @@ def inject_global_vars(app, global_template_variables):
         base_context.update(global_template_variables)
 
         return base_context
+
+app = create_app(os.environ.get('FLASK_ENV', 'production'))
