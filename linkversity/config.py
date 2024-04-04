@@ -29,6 +29,13 @@ class BaseConfig:
     UPLOADED_PATH_IMAGE = os.path.join(STATIC, "uploads", "images")
     UPLOADED_PATH_THUMB = os.path.join(STATIC, "uploads", "thumbs")
 
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    SALT = os.environ.get('SALT')
+    RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
+    RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
+
 
 class ProductionConfig(BaseConfig):
     """Configurations for production"""
