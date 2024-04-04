@@ -2,4 +2,5 @@ shopyo==4.9.3
 SQLAlchemy==1.4.27
 validators==0.18.2
 flask-reuploaded
+python-dotenv
 gunicorn
