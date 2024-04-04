@@ -34,7 +34,7 @@ packaging==23.1
 Pillow==10.0.0
 PyMySQL==1.1.0
 python-dotenv==1.0.1
-shopyo==4.9.3
+shopyo==4.9.4
 six==1.16.0
 SQLAlchemy==2.0.29
 sqlalchemy-libsql==0.1.0
