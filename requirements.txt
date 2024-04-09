@@ -1,7 +1,7 @@
 email-validator==2.0.0.post2
 Flask==2.3.2
 Flask-Admin==1.6.1
-Flask-Login==0.6.2
+Flask-Login==0.6.3
 flask-mailman==0.3.0
 flask-marshmallow==0.15.0
 Flask-Migrate==4.0.4
