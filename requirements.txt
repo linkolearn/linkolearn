@@ -15,3 +15,4 @@ shopyo==4.9.4
 SQLAlchemy==2.0.29
 sqlalchemy-libsql==0.1.0
 validators==0.18.2
+gunicorn
