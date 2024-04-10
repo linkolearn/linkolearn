@@ -4,12 +4,11 @@ import os
 import json
 
 from init import themes_path
-from modules.box__default.settings.helpers import get_setting
 
 
 def get_front_theme_dir():
     theme_dir = os.path.join(
-        themes_path, "front", get_setting("ACTIVE_FRONT_THEME")
+        themes_path, "front", os.environ.get('ACTIVE_FRONT_THEME', 'mistrello')
     )
     return theme_dir
 
@@ -22,7 +21,7 @@ def get_front_theme_info_data():
 
 
 def get_active_front_theme():
-    return get_setting("ACTIVE_FRONT_THEME")
+    return os.environ.get('ACTIVE_FRONT_THEME', 'mistrello')
 
 
 def get_active_front_theme_version():
@@ -39,7 +38,7 @@ def get_active_front_theme_styles_url():
 
 def get_back_theme_dir():
     theme_dir = os.path.join(
-        themes_path, "back", get_setting("ACTIVE_BACK_THEME")
+        themes_path, "back", os.environ.get('ACTIVE_BACK_THEME', 'boogle')
     )
     return theme_dir
 
@@ -52,7 +51,7 @@ def get_back_theme_info_data():
 
 
 def get_active_back_theme():
-    return get_setting("ACTIVE_BACK_THEME")
+    return os.environ.get('ACTIVE_BACK_THEME', 'boogle')
 
 
 def get_active_back_theme_version():
