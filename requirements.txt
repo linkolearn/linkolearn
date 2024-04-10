@@ -10,7 +10,7 @@ Flask-Reuploaded==1.3.0
 flask-simple-captcha==1.1.1
 Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.1.1
-libsql-client==0.3.0
+git+https://github.com/tursodatabase/libsql-client-py.git@595964c32d9969e4daf4abdba01a35921c58d013
 python-dotenv==1.0.1
 shopyo==4.9.4
 SQLAlchemy==2.0.29
