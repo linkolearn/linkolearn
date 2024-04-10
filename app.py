@@ -264,7 +264,7 @@ def setup_theme_paths(app):
 def inject_global_vars(app, global_template_variables):
     @app.context_processor
     def inject_global_vars():
-        APP_NAME = "dwdwefw"
+        APP_NAME = os.environ.get('APP_NAME', 'PLEASE SET APP NAME in .env')
 
         base_context = {
             "APP_NAME": APP_NAME,
