@@ -14,6 +14,6 @@ git+https://github.com/tursodatabase/libsql-client-py.git@595964c32d9969e4daf4ab
 python-dotenv==1.0.1
 shopyo==4.9.4
 SQLAlchemy==2.0.29
-sqlalchemy-libsql==0.1.0
+git+https://github.com/Abdur-rahmaanJ/sqlalchemy-libsql.git@14790bbe3ff1445ca94da661eace3cdff75d144b
 validators==0.18.2
 gunicorn
