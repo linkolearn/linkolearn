@@ -16,3 +16,4 @@ SQLAlchemy==2.0.29
 sqlalchemy-libsql
 validators==0.18.2
 gunicorn
+libsql-experimental
