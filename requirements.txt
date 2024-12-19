@@ -12,8 +12,6 @@ Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.1.1
 python-dotenv==1.0.1
 shopyo==4.9.4
-SQLAlchemy==2.0.29
-sqlalchemy-libsql
 validators==0.18.2
 gunicorn
-libsql-experimental
+sqlalchemy-libsql

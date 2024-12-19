@@ -23,15 +23,19 @@ from flask_login import current_user
 from shopyo.api.assets import register_devstatic
 from shopyo.api.debug import is_yo_debug
 from shopyo.api.file import trycopy
-from modules.box__default.auth.models import User
-from modules.box__linkolearn.linkolearn.models import Path
+
 
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, base_path)
 from config import app_config
 
-# from init import db
+from modules.box__default.auth.models import User
+from modules.box__linkolearn.linkolearn.models import Path
+
+from shopyo_admin import DefaultModelView
+
+from init import db
 from init import load_extensions
 from init import modules_path
 
