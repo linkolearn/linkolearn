@@ -75,6 +75,15 @@ def create_app(config_name="development"):
     load_config_from_instance(app, config_name)
     create_config_json()
     load_extensions(app)
+
+    # Connection pool settings
+    app.config['SQLALCHEMY_POOL_SIZE'] = 5  # Number of connections to keep in the pool
+    app.config['SQLALCHEMY_MAX_OVERFLOW'] = 10  # Extra connections beyond pool_size
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 30  # Maximum wait time for a connection
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800  # Recycle connections every 30 minutes
+
+    # Disable track_modifications to save memory
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     setup_flask_admin(app)
     register_devstatic(app, modules_path)
     load_blueprints(app, config_name, global_template_variables, global_configs)
