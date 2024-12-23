@@ -84,6 +84,10 @@ def create_app(config_name="development"):
 
     # Disable track_modifications to save memory
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over HTTPS
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # or 'None' if cross-site
+
     setup_flask_admin(app)
     register_devstatic(app, modules_path)
     load_blueprints(app, config_name, global_template_variables, global_configs)
