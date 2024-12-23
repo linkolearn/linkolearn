@@ -88,6 +88,10 @@ def create_app(config_name="development"):
     app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over HTTPS
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # or 'None' if cross-site
 
+    from werkzeug.middleware.proxy_fix import ProxyFix
+
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     setup_flask_admin(app)
     register_devstatic(app, modules_path)
     load_blueprints(app, config_name, global_template_variables, global_configs)
