@@ -23,6 +23,8 @@ from modules.box__linkolearn.linkolearn.models import Emoji
 from modules.box__linkolearn.linkolearn.forms import ChangeNameForm
 from modules.box__linkolearn.linkolearn.forms import ChangePasswordForm
 
+from init import db
+
 from shopyo.api.security import get_safe_redirect
 from shopyo.api.forms import flash_errors
 from shopyo.api.html import notify
@@ -158,6 +160,26 @@ def change_emoji():
 
 def sectionlinks2str(section_links):
     return '&#10;'.join([_.url for _ in section_links])
+
+
+@module_blueprint.route("/settings/p/<path_id>/delete", methods=["GET", "POST"])
+@login_required
+def delete_path(path_id):
+    path = Path.query.get(path_id)
+    if not path.path_user == current_user:
+        return jsonify({'error': 'x'})
+
+    bm = BookmarkList.query.filter(BookmarkList.path_id == path_id).all()
+    for b in bm:
+        b.delete(commit=False)
+
+    lm = LikeList.query.filter(LikeList.path_id == path_id).all()
+    for l in lm:
+        l.delete(commit=False)
+    path.delete(commit=False)
+    db.session.commit()
+    return mhelp.redirect_url('www.user_profile', username=current_user.username)
+
 
 
 @module_blueprint.route("/settings/p/<path_id>/edit", methods=["GET", "POST"])
