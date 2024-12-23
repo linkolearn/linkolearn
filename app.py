@@ -71,7 +71,7 @@ def create_app(config_name="development"):
     )
 
     from werkzeug.middleware.proxy_fix import ProxyFix
-
+    from flask import request, jsonify
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     @app.route("/debug")
