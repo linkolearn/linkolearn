@@ -70,6 +70,10 @@ def create_app(config_name="development"):
         instance_relative_config=True,
     )
 
+    from werkzeug.middleware.proxy_fix import ProxyFix
+
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
     load_plugins(app, global_template_variables, global_configs, config_name)
     load_config_from_obj(app, config_name)
     load_config_from_instance(app, config_name)
@@ -88,9 +92,6 @@ def create_app(config_name="development"):
     app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over HTTPS
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # or 'None' if cross-site
 
-    from werkzeug.middleware.proxy_fix import ProxyFix
-
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     setup_flask_admin(app)
     register_devstatic(app, modules_path)
