@@ -17,7 +17,11 @@ login_manager.login_message = notify_warning("Please login for access")
 
 @login_manager.user_loader
 def load_user(id):
-    return User.query.get(id)
+    try:
+        return User.query.get(id)
+    except TimeoutError:
+        app.logger.error("Database connection timeout occurred.")
+    
 
 
 def admin_required(f):
