@@ -13,7 +13,7 @@ python -m pip install -r requirements.txt
 
 2.
 
-Create .env with the following (or add the following environment variables)
+Create .env with the following (or add the following environment variables) or add those to instance/config.py
 
 ```.env
 SQLALCHEMY_DATABASE_URI = "file:"
