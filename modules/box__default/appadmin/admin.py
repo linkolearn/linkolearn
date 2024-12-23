@@ -3,6 +3,7 @@ from functools import wraps
 from flask import flash
 from flask import redirect
 from flask import url_for
+from flask import current_app
 
 from flask_login import current_user
 
@@ -20,7 +21,7 @@ def load_user(id):
     try:
         return User.query.get(id)
     except TimeoutError:
-        app.logger.error("Database connection timeout occurred.")
+        current_app.logger.error("Database connection timeout occurred.")
     
 
 

@@ -50,13 +50,16 @@ def index():
 
     # return str(module_blueprint.template_folder)
     def get_last_5():
-        paths = Path.query.all()
-        paths = [p for p in paths if p.is_visible]
-        if len(paths) >= 5:
-            return paths[-6:-1]
-        else:
-            len_paths = len(paths) +1
-            return paths[:len_paths]
+        try:
+            paths = Path.query.all()
+            paths = [p for p in paths if p.is_visible]
+            if len(paths) >= 5:
+                return paths[-6:-1]
+            else:
+                len_paths = len(paths) +1
+                return paths[:len_paths]
+        except:
+            return []
 
     context = {
         'get_last_5': get_last_5
