@@ -74,6 +74,11 @@ def create_app(config_name="development"):
 
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
+    @app.route("/debug")
+    def debug_headers():
+        headers = dict(request.headers)
+        return jsonify(headers=headers)
+
     load_plugins(app, global_template_variables, global_configs, config_name)
     load_config_from_obj(app, config_name)
     load_config_from_instance(app, config_name)
