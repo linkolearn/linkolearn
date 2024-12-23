@@ -30,6 +30,12 @@
 				<i class="fa fa-pencil-alt"></i>
 			</button>
 		</a>
+		<a href="{{ url_for('linkolearn.delete_path', path_id=path.id) }}">
+			<button class="btn btn-warning" style="background-color: red; color: white"
+				onclick="return confirm('Are you sure you want to delete this item?');">
+				<i class="fa fa-trash"></i>
+			</button>
+		</a>
 			{%if path.is_visible%}
 			<a href="{{ url_for('linkolearn.toggle_visibility', path_id=path.id, next=path.get_url()) }}">
 				<button class="btn btn-success">

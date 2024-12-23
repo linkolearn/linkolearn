@@ -81,7 +81,7 @@ class BookmarkList(PkModel):
 
     __tablename__ = "bookmark_lists"
 
-    path_id = db.Column(db.Integer, db.ForeignKey("paths.id"), nullable=False)
+    path_id = db.Column(db.Integer, db.ForeignKey("paths.id", ondelete="CASCADE"), nullable=False)
     users = db.relationship(
         "User",
         secondary=bookmark_list_user_bridge,
