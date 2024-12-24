@@ -62,7 +62,8 @@ def index():
             return []
 
     context = {
-        'get_last_5': get_last_5
+        'get_last_5': get_last_5,
+        'current_user': current_user
     }
 
     return render_template("linkolearn_theme/index.html", **context)
