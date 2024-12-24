@@ -47,6 +47,26 @@ for env_file in ('.env', '.flaskenv'):
 
 3.
 
+Add config.json file in root dir with content
+
+```json
+{
+    "admin_user": {
+      "username": "appinv",
+      "email": "admin@domain.com",
+      "password": "pass"
+    },
+    "settings": {
+      "APP_NAME": "Demo",
+      "ACTIVE_FRONT_THEME": "blogus",
+      "ACTIVE_BACK_THEME": "boogle",
+      "CURRENCY": "MUR"
+    }
+}
+```
+
+4.
+
 Run
 
 ```
