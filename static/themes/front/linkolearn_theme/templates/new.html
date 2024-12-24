@@ -10,7 +10,7 @@
 {%endblock%}
 {%block body%}
 <div class="container">  
-  <h3>Create new path</h3>
+  <h3>Create new course / set of links</h3>
   <form>
     <br>
     <label for="path-link" class="form-label">Path Link</label>
@@ -20,7 +20,7 @@
         /{{current_user.username}}/</span>
       </div>
       <div class="col-auto">
-        <input type="text" id="path-link" class="form-control" required> e.g mastering-advanced-english
+        <input type="text" id="path-link" class="form-control" required> e.g Writing mastering-advanced-english will appear as linkversity.xyz/{{current_user.username}}/mastering-advanced-english
       </div>
     </div>
   </nav>

@@ -35,9 +35,15 @@
     <div class="row">
         <div class="col-md-4">
           <div class="p-3">
+            {% if current_user.is_authenticated %}
+
+            You ARE LOGGED IN!!!<br>Enjoy!
+
+            {%else%}
             <form action="{{url_for('auth.register')}}" method="post">
                     {%include 'auth/blocks/register_form.html'%}
                 </form>
+            {%endif%}
           </div>
           
         </div>
