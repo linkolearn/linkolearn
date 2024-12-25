@@ -115,3 +115,8 @@ def contact():
 @module_blueprint.route("/about")
 def about():
     return render_template("linkolearn_theme/templates/info/about.html")
+
+
+@module_blueprint.route("/info")
+def info():
+    return render_template("linkolearn_theme/templates/info.html")
