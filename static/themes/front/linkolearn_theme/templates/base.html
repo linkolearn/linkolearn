@@ -105,21 +105,7 @@ body.offcanvas-active{
     word-wrap: break-word;
   }
 </style>
-<style type="text/css">
-  .footer {
-    font-size: 15px;
-    width:100%;
-    height:40px;
-    position:fixed;
-    bottom:0;
-    left:0;
-  }
 
-  .footer a{
-    display: inline-block;
-  }
-
-</style>
 <style type="text/css">
 .navbar .active{
   color: white !important;
@@ -215,22 +201,43 @@ body.offcanvas-active{
 <div style="height: 40px;">
   
 </div>
-<div class="footer bg-dark p-2">
-  <a href="{{ url_for('www.privacy_policy') }}">
-    <p>privacy policy</p>
-  </a> | 
-  <a href="{{ url_for('www.about') }}">
-    <p>about</p>
-  </a> | 
-  <a href="{{ url_for('www.contact') }}">
-    <p>contact</p>
-  </a> | 
-  <a href="https://github.com/linkolearn/linkolearn/issues">
-    <p>report bugs</p>
-  </a> | 
-  <a href="https://github.com/linkolearn/linkolearn">
-    <p>it's OpenSource!</p>
-  </a>
-</div>
+
+
+<footer class="bg-dark text-white text-center text-lg-start">
+  <div class="container p-4">
+    <!-- Row for Links -->
+    <div class="row">
+      <div class="col">
+        <ul class="list-unstyled mb-0">
+          <li>
+
+            <a href="{{ url_for('www.privacy_policy') }}" class="text-white">
+              privacy policy
+            </a> .
+            <a href="{{ url_for('www.about') }}" class="text-white">
+              about
+            </a> .
+            <a href="{{ url_for('www.contact') }}" class="text-white">
+              contact
+            </a> .
+            <a href="https://github.com/linkolearn/linkolearn/issues" class="text-white">
+              report bugs
+            </a> .
+            <a href="https://github.com/linkolearn/linkolearn" class="text-white">
+              it's OpenSource!
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Copyright Section -->
+<!--   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2024 Company Name. All rights reserved.
+  </div> -->
+</footer>
+
 </body>
 </html>
