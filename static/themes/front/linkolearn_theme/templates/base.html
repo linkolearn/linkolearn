@@ -121,6 +121,8 @@ body.offcanvas-active{
   color: white !important;
 }
 </style>
+
+
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWMMBMPT7S"></script>
 <script>
@@ -171,6 +173,8 @@ body.offcanvas-active{
 
     <li class="nav-item "><a class="nav-link" href="https://github.com/linkversity/linkversity/issues/new/choose" target="_blank"> <i class="fa fa-bug"></i> </a></li>
 
+    <li class="nav-item {{'active' if active_page == 'info'}}"><a class="nav-link" href="{{ url_for('www.info') }}"> <i class="fa fa-info"></i> </a></li>
+
     <li class="nav-item {{'active' if active_page == 'bookmarks'}}"><a class="nav-link" href="{{ url_for('linkolearn.bookmarks') }}"> <i class="fa fa-bookmark"></i> </a></li>
 
       <li class="nav-item {{'active' if active_page == 'settings'}}"><a class="nav-link" href="{{ url_for('linkolearn.settings') }}"> <i class="fa fa-wrench"></i> </a></li>
@@ -206,26 +210,13 @@ body.offcanvas-active{
 </div>
 
 
-<footer class="bg-dark text-white text-center text-lg-start">
-  <div class="container p-4">
+<footer class="bg-dark text-white text-center text-lg-start fixed-bottom p-0">
+
     <!-- Row for Links -->
     <div class="row">
       <div class="col">
         <ul class="list-unstyled mb-0">
           <li>
-
-            <a href="{{ url_for('www.privacy_policy') }}" class="text-white">
-              privacy policy
-            </a> .
-            <a href="{{ url_for('www.about') }}" class="text-white">
-              about
-            </a> .
-            <a href="{{ url_for('www.contact') }}" class="text-white">
-              contact
-            </a> .
-            <a href="https://github.com/linkolearn/linkolearn/issues" class="text-white">
-              report bugs
-            </a> .
             <a href="https://github.com/linkolearn/linkolearn" class="text-white">
               it's OpenSource!
             </a>
@@ -233,8 +224,7 @@ body.offcanvas-active{
         </ul>
       </div>
 
-    </div>
-  </div>
+</div>
 
   <!-- Copyright Section -->
 <!--   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
