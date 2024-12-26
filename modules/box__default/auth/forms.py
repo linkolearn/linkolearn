@@ -44,7 +44,8 @@ class RegistrationForm(FlaskForm):
             EqualTo("confirm", message="Passwords must match"),
         ],
         render_kw={
-        'placeholder': 'Password min. 6 chars'
+        'placeholder': 'Password min. 6 chars',
+        'id':'password-1'
         }
     )
     recaptcha = RecaptchaField()
@@ -60,7 +61,8 @@ class RegistrationForm(FlaskForm):
             EqualTo("confirm", message="Passwords must match"),
         ],
         render_kw={
-        'placeholder': 'Reconfirm password'
+        'placeholder': 'Reconfirm password',
+        'id':'password-2'
         }
     )
     
