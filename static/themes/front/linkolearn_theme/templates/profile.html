@@ -133,6 +133,30 @@
 						</b>
 					
 				</div>
+				{%else%}
+					{%if user == current_user%}
+						<div class="card p-2 link-outer shadow-sm mb-2">
+							<b>
+								<a 
+								href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=url_for('www.user_profile', username=path.path_user.username)) }}"
+								class="profile-repo link-repo"
+								>
+								<i 
+								class="fa fa-heart heart-icon 
+								{{ 'liked' if current_user in path.like_list.users else 'unliked' }}
+								profile-repo"></i> 
+								</a>
+
+								&nbsp;
+								<a 
+								href="{{path.get_url()}}" 
+								class="p-0 m-0 profile-repo">{{ path.slug }}
+								</a>
+								
+							</b>
+						
+					</div>
+					{%endif%}
 				{%endif%}
 				{%endfor%}
 			</div>
