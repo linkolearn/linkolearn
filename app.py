@@ -69,6 +69,7 @@ def create_app(config_name="development"):
         instance_path=os.path.join(base_path, "instance"),
         instance_relative_config=True,
     )
+    app.config.from_pyfile('config.py')
 
     from werkzeug.middleware.proxy_fix import ProxyFix
     from flask import request, jsonify
@@ -98,6 +99,11 @@ def create_app(config_name="development"):
     load_blueprints(app, config_name, global_template_variables, global_configs)
     setup_theme_paths(app)
     inject_global_vars(app, global_template_variables)
+
+
+    @app.shell_context_processor
+    def make_shell_context():
+        return {'db': db, 'User':User}
     return app
 
 
