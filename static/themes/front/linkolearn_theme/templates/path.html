@@ -49,6 +49,14 @@
 				</button>
 			</a>
 			{%endif%}
+
+
+			<a href="#" class="stat-elem">
+			<div class="btn-group" role="group" aria-label="Basic example">
+			  <button id='pass-but' type="button" class="btn {{ 'btn-success' if path.is_password_protected else 'btn-info'}} text-reset"><i style="color: white !important" class="fa fa-key"></i></button >
+			  <input id="pass-input" type="password" class='btn  text-reset  bg-white text-dark'  style="border: 1px solid black; border-left: None;">
+			</div>
+		</a>
 		{%endif%}
 		<a href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=path.get_url()) }}" class="stat-elem">
 			<div class="btn-group" role="group" aria-label="Basic example">
@@ -75,19 +83,164 @@
 			</div>
 			<br>
 			<br>
-			{% for section in path.sections %}
-				<h4>{{ section.title }}</h4>
-				<hr>
-				{% for link in section.links %}
-				<p class="links p-0 mb-1"><b>*</b> <a href="{{ link.url }}"> {{ link.url }}</a></p>
+			{%if not path.is_password_protected%}
+				{% for section in path.sections %}
+					<h4>{{ section.title }}</h4>
+					<hr>
+					{% for link in section.links %}
+					<p class="links p-0 mb-1"><b>*</b> <a href="{{ link.url }}"> {{ link.url }}</a></p>
+					{% endfor %}
+					<br>
+					<br>
 				{% endfor %}
-				<br>
-				<br>
-			{% endfor %}
+
+			{% else %}
+				{% if has_entered_password %}
+					{% for section in path.sections %}
+						<h4>{{ section.title }}</h4>
+						<hr>
+						{% for link in section.links %}
+						<p class="links p-0 mb-1"><b>*</b> <a href="{{ link.url }}"> {{ link.url }}</a></p>
+						{% endfor %}
+						<br>
+						<br>
+					{% endfor %}
+				{%else%}
+
+					This is password protected! <br><br>
+					<form>
+				        <input id="check-pass-input" class="form-control" type="password" name="password" placeholder="Password" required><br>
+				        <input  type="hidden" name="csrf_token" value="{{csrf_token()}}">
+				        <button id="check-pass-but" class="btn btn-primary" >Submit</button>
+				    </form>
+			    {%endif%}
+			{%endif%}
 		</div>
 		<div class="col-3">
 
 		</div>
 	</div>
 </div>
+
+
+<script type="text/javascript">
+
+
+document.addEventListener("DOMContentLoaded", function () {
+	{%if current_user == path.path_user%}
+
+    // Get the password button and input
+    const passwordButton = document.querySelector("#pass-but");
+    const passwordInput = document.querySelector("#pass-input");
+    
+    // Attach event listener to the button
+    passwordButton.addEventListener("click", function () {
+    	event.preventDefault();
+
+        const pathId = "{{path.id}}"; // Assuming path_id is stored as a data attribute
+        const password = passwordInput.value.trim();
+
+
+        // Perform an AJAX POST request
+        const formData = new FormData();
+		formData.append("password", password);  // Add password field
+		formData.append("csrf_token", '{{csrf_token()}}');  // Add CSRF token
+        fetch(`{{url_for('linkolearn.toggle_password', path_id=path.id)}}`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": '{{csrf_token()}}'
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Failed to toggle password protection.");
+                }
+            })
+            .then((data) => {
+                if (data.status === "success") {
+                    alert("Password protection toggled successfully!");
+                    // Optionally reload or update UI dynamically
+                    window.location.reload();
+                } else {
+                    alert("Error toggling password protection.");
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                // alert("An error occurred while toggling password protection."+password);
+            });
+    });
+
+    {%endif%}
+
+   
+
+    {% if has_entered_password == False %}
+
+    const passwordCheckButton = document.querySelector("#check-pass-but");
+    const passwordCheckInput = document.querySelector("#check-pass-input");
+    
+
+    
+    passwordCheckButton.addEventListener("click", function (event) {
+
+    	event.preventDefault();
+    	const password = passwordCheckInput.value.trim();
+    	const formDataC = new FormData();
+		formDataC.append("password", password);  // Add password field
+		formDataC.append("csrf_token", '{{csrf_token()}}');  // Add CSRF token
+
+        const pathId = "{{path.id}}"; // Assuming path_id is stored as a data attribute
+        
+
+        // Perform an AJAX POST request
+        fetch(`{{url_for('linkolearn.check_password', path_id=path.id)}}`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": '{{csrf_token()}}'
+            },
+            body: formDataC,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Failed to check password");
+                }
+            })
+            .then((data) => {
+                if (data.status === "success") {
+                    alert("Password checked successfully!");
+                    // Optionally reload or update UI dynamically
+                    window.location.reload();
+                } else {
+                    alert("Error checking pass"+password);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                // alert("An error occurred while checking."+password);
+            });
+    });
+
+    {% endif %}
+
+    // Function to get CSRF token from cookies
+    function getCsrfToken() {
+        const name = "csrf_token=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookies = decodedCookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return "";
+    }
+});
+</script>
 {%endblock%}

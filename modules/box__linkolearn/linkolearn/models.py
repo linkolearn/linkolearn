@@ -2,28 +2,53 @@ import datetime
 
 from flask import url_for
 
+from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash
+
 from shopyo.api.models import PkModel
 from modules.box__default.auth.models import User
 from init import db
 
 
 class Path(PkModel):
-
     __tablename__ = "paths"
+    
     slug = db.Column(db.String(200), nullable=False)
     title = db.Column(db.String(200), nullable=False)
     sections = db.relationship("Section", backref="section_path", lazy=True, cascade="all, delete-orphan")
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     is_visible = db.Column(db.Boolean, default=True)
-    # created_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    like_list = db.relationship(
-        "LikeList", backref="like_list_path", lazy=True, uselist=False
-    )
-    bookmark_list = db.relationship(
-        "BookmarkList", backref="bookmark_list_path", lazy=True, uselist=False
-    )
+    # Password for protection
+    _password = db.Column(db.String(128), nullable=True)
+
+    # Optional: Enforce password protection at creation
+    is_password_protected = db.Column(db.Boolean, default=False)
+
+    # Relationships
+    like_list = db.relationship("LikeList", backref="like_list_path", lazy=True, uselist=False)
+    bookmark_list = db.relationship("BookmarkList", backref="bookmark_list_path", lazy=True, uselist=False)
+
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, plaintext):
+        self._password = generate_password_hash(plaintext, method="sha256")
+        self.is_password_protected = True
+
+    def check_password(self, password):
+        if self._password is None:
+            return False
+        return check_password_hash(self._password, password)
+
+    def remove_password(self):
+        """Remove password protection from the path."""
+        self._password = None
+        self.is_password_protected = False
 
     def get_url(self):
         return url_for(

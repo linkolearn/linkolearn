@@ -7,6 +7,7 @@ from flask import flash
 # from flask import request
 from flask import Blueprint
 from flask import render_template
+from flask import session
 
 #
 from shopyo.api.html import notify
@@ -81,25 +82,32 @@ def user_profile(username):
 
 @module_blueprint.route("/<username>/<path_slug>")
 def path(username, path_slug):
-    user = User.query.filter(User.username == username).first_or_404()
+    user = User.query.filter(
+        func.lower(User.username) == func.lower(username)
+        ).first_or_404()
     path = Path.query.filter(Path.slug == path_slug, Path.user_id == user.id).first_or_404()
     if (not path.is_visible):
         if (current_user.is_authenticated):
             if(path.path_user == current_user):
                 pass
+            elif path.is_password_protected:
+                pass
             else:
                 flash(notify("Path not public!", alert_type='warning'))
                 return redirect(url_for('www.index'))
         else:
-            flash(notify("Path not public!", alert_type='warning'))
-            return redirect(url_for('www.index'))
+            if path.is_password_protected:
+                pass
+            else:
+                flash(notify("Path not public!", alert_type='warning'))
+                return redirect(url_for('www.index'))
 
     context = {}
-    user = User.query.filter(
-        func.lower(User.username) == func.lower(username)
-        ).first_or_404()
-    
-    context.update({'user': user, 'path': path})
+
+    url = path.get_url().replace('/', '_')
+    has_entered_password = session.get(f'has_entered_password_{url}', False)
+
+    context.update({'user': user, 'path': path, 'has_entered_password': has_entered_password, 'session':session})
     return render_template("linkolearn_theme/templates/path.html", **context)
 
 
