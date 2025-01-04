@@ -6,6 +6,7 @@ from flask import redirect
 from flask import flash
 from flask import request
 from flask import jsonify
+from flask import session
 
 # from shopyo.api.html import notify_success
 # from shopyo.api.forms import flash_errors
@@ -81,6 +82,45 @@ def toggle_bookmark(path_id):
             return redirect(url_for('www.index'))
     else:
         return redirect(url_for('www.index'))
+
+
+@module_blueprint.route("/password/<path_id>", methods=['POST'])
+@login_required
+def toggle_password(path_id):
+    path = Path.query.get(path_id)
+
+    if current_user == path.path_user:
+        if path.is_password_protected in [False, None]:
+            path.is_password_protected = True
+            path.password = request.form.get('password') 
+            print(request.form.get('password') )
+            path.is_visible = False
+            path.save()
+        elif path.is_password_protected is True:
+            path.remove_password()
+            url = path.get_url().replace('/', '_')
+            session['has_entered_password_{url}'] = False
+            path.save()
+        
+    return jsonify({'status': 'success'})
+
+
+@module_blueprint.route("/check-password/<path_id>", methods=['POST'])
+def check_password(path_id):
+
+    path = Path.query.get(path_id)
+
+    password = request.form.get('password')
+
+    print('.....', path.check_password(password), password, '>>><<<')
+    if path.check_password(password) is True:
+        url = path.get_url().replace('/', '_')
+        session[f'has_entered_password_{url}'] = True
+        return jsonify({'status': 'success'})
+    elif path.check_password(password) is False:
+        url = path.get_url().replace('/', '_')
+        session[f'has_entered_password_{url}'] = False
+        return jsonify({'status': 'error'})
 
 
 @module_blueprint.route("/visibility/<path_id>", methods=["GET"])
