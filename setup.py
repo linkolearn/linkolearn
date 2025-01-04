@@ -15,7 +15,7 @@ from setuptools import setup
 
 import os
 import sys
-from linkversity import __version__  # thanks gunicorn
+from . import __version__  # thanks gunicorn
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -58,6 +58,10 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
     keywords="",  # Optional
     # You can just specify package directories manually here if your project is
