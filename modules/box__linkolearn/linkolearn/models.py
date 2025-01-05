@@ -10,6 +10,9 @@ from shopyo.api.models import PkModel
 from modules.box__default.auth.models import User
 from init import db
 
+import re
+from markdown_it import MarkdownIt
+
 
 class Path(PkModel):
     __tablename__ = "paths"
@@ -54,6 +57,30 @@ class Path(PkModel):
         return url_for(
             "www.path", username=self.path_user.username, path_slug=self.slug
         )
+
+    def is_valid_markdown_link(self, string):
+        pattern = r'^\[([^\]]+)\]\((https?:\/\/[^\s\)]+|[^\s\)]+)\)$'
+        return bool(re.match(pattern, string))
+
+    def extract_link(self, md_text):
+        md = MarkdownIt()
+        tokens = md.parseInline(md_text)
+
+        link_data = {}
+
+        for token in tokens:
+            if token.children: 
+                for child in token.children:
+                    if child.type == "link_open" and child.attrs:
+                        # Extract href safely
+                        attrs_dict = dict(child.attrs)
+                        link_data["href"] = attrs_dict.get("href")
+                    elif child.type == "text":
+                        link_data["text"] = child.content  # Extract the link text
+                    if "href" in link_data and "text" in link_data:
+                        return link_data
+
+        return {} 
 
 
 like_list_user_bridge = db.Table(

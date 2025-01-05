@@ -252,9 +252,16 @@ def edit_path(path_id):
             sec_links = sec['section_links']
             print(sec_links)
             if (sec_links.strip() != ''):
-                urls = sec_links.split('\n')
-                print(urls)
-                urls = list((url for url in urls if validators.url(url)))
+                urls_ = sec_links.split('\n')
+                urls = []
+                for u in urls_:
+                    if u.startswith('['):
+                        if path.is_valid_markdown_link(u):
+                            urls.append(u)
+                    elif validators.url(u):
+                        urls.append(u)
+                    else:
+                        pass
                 section.links = list((Link(url=url) for url in urls))
 
             path.sections.append(section)
