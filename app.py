@@ -69,8 +69,11 @@ def create_app(config_name="development"):
         instance_path=os.path.join(base_path, "instance"),
         instance_relative_config=True,
     )
-    app.config.from_pyfile('config.py')
 
+    try:
+        app.config.from_pyfile('config.py')
+    except:
+        pass 
     from werkzeug.middleware.proxy_fix import ProxyFix
     from flask import request, jsonify
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
