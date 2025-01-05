@@ -1,7 +1,7 @@
 {%set active_page='path'%}
 {%extends 'linkolearn_theme/templates/base.html'%}
 {%block head%}
-<title>Learn By Links</title>
+<title>{{path.slug.replace('-', ' ')}}</title>
 <style type="text/css">
 	 .stat-elem a, a:hover,a:visited, a:focus {
 	    text-decoration:none;
