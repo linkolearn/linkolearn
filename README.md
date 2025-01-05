@@ -70,6 +70,6 @@ Add config.json file in root dir with content
 Run
 
 ```
-shopyo initialise
+shopyo initialise --no-clear-migration
 flask run --debug
 ```
