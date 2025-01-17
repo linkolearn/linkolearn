@@ -1,179 +1,187 @@
-{%set active_page='home'%}
-{%extends 'linkolearn_theme/templates/base.html'%}
+<!doctype html>
+<html>
 
-{%block head%}
-<title>Learn By Links</title>
-<link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
-<style type="text/css">
-  .link-outer a{
-    color: #0366d6;
-    font-size: 30px;
-  }
-  .link .heart-icon {
-    line-height: 50px;
-    font-size: 20px;
-    color: #6a737d;
-  }
-  .liked{
-    color: #22b24c !important;
-  }
-  .highlight{
-    background-color: rgba(255, 255, 0, 0.959);
-    font-weight: bold;
-  }
-  .profile-icon{
-    border: 5px solid salmon;
-    width: 100px; height: 100px; padding: 10px;
-    border-radius: 50%;
-  }
-</style>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-{%endblock%}
-{%block body%}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="linkolearn, learn links, open source, courses" />
+    <meta name="description" content="Create courses using links" />
+    <link rel="icon" href="{{url_for('static', filename='linkversity.png')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+</head>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4">
-          <div class="p-3">
-            {% if current_user.is_authenticated %}
-
-            You ARE LOGGED IN!!!<br>Enjoy!
-
-            {%else%}
-            <form id="reg-form" action="{{url_for('auth.register')}}" method="post">
-                    {%include 'auth/blocks/register_form.html'%}
-                    <span id="message"></span>
-                </form>
-            {%endif%}
-          </div>
-          
-        </div>
-        <div class="col-md-8">
-          <div class="row">
-            <div class="col-md-8">
-             <div class="p-5">
-              <h1>Linkversity allows people to create courses from links around the internet. </h1>
-               <i>
-                 
-                 Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.<br><br>
-                 It is particularly useful for the <span class="highlight">Education</span> 
-                 sector and <span class="highlight">OpenSource</span> projects to get 
-                 contributors started quickly. It can be used as a 
-                 <span class="highlight">knowledge base</span>. It was inspired by works done on 
-                 <a href="https://web.lumosql.org/">LumoSQL</a><br><br>
-                 It can also be used as a research bookmark manager!<br><br>
-               </i>
-               - Emails no longer needed!<br>
-               - Private / Public feature<br>
-               - Password-protected pages<br>
-               - Share without needing login<br>
-               - Markdown support
-               <br>
-               <a href="https://drive.google.com/uc?id=14pJVwsPphH7duiap_jdcDJg668e7ieCx&export=download
-" target="_blank">[ Download on Android ]</a>
-               <br><br>
-               <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-             </div>
+<body>
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 p-8">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="{{url_for('www.user_profile', username=current_user.username)}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{{url_for('auth.logout')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign out</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{{url_for('auth.login')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign in</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
-            <div class="col-md-4">
-              <div class="p-5">
-                <img src="{{url_for('static', filename='linkolearn.svg')}}" class="img-fluid" alt="Responsive image">
-              </div>
-              
-            </div>
-            
-          </div>
-          
         </div>
+    </nav>
+    <div class="max-w-screen-xl mx-auto px-4 p-8">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="text-left md:w-1/2">
+                <p class="text-6xl font-bold">Organize links like a PRO</p><br><br>
+                <p class="text-xl">Opensource | Businesses | Personal</p><br><br>
+                <a href="{{url_for('new.index')}}">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900 rounded-full">Start creating</button>
+              </a>
+            </div>
+            <div class="flex justify-center w-full md:w-1/2 mt-8 md:mt-0">
+                <img src="{{url_for('static', filename='organize_linkversity.svg')}}" alt="Description" class="w-full">
+            </div>
+        </div>
+    </div>
+    <div class="max-w-screen-xl mx-auto px-4 p-8">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="flex justify-center w-full md:w-1/3">
+                <img src="{{url_for('static', filename='rocket_linkversity.svg')}}" alt="Description" class="w-full">
+            </div>
+            <div class="text-left w-full md:w-2/3 p-8 m-8">
+                <p class="text-4xl font-bold">A tool to ramp up quickly on a topic</p><br><br>
+                <p class="text-xl">Linkversity allows people to create courses from links around the internet.
+                    Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.</p><br><br>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="max-w-screen-xl mx-auto px-4 p-8">
+        <div class="flex flex-col md:flex-row justify-between gap-8">
+            <!-- Item 1 -->
+            <div class="flex flex-col items-center w-full md:w-1/3">
+                <img src="{{url_for('static', filename='discover_linkversity.svg')}}" alt="Image 1" class="w-32 h-32 rounded-full mb-4">
+                <p class="text-2xl font-semibold">Discover useful collections</p>
+                <p class="text-base">Gather links on a topic and send them to people.</p>
+            </div>
+            <!-- Item 2 -->
+            <div class="flex flex-col items-center w-full md:w-1/3">
+                <img src="{{url_for('static', filename='collab_linkversity.svg')}}" alt="Image 2" class="w-32 h-32 rounded-full mb-4">
+                <p class="text-2xl font-semibold">Collaborate with teams</p>
+                <p class="text-base">Allow your friends to add links to collections for serious works</p>
+            </div>
+            <!-- Item 3 -->
+            <div class="flex flex-col items-center w-full md:w-1/3">
+                <img src="{{url_for('static', filename='security_linkversity.svg')}}" alt="Image 3" class="w-32 h-32 rounded-full mb-4">
+                <p class="text-2xl font-semibold">Protect your links</p>
+                <p class="text-base">With varying levels of privacy, you can restrict access. Set visibility and password-protect collections</p>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="max-w-screen-xl mx-auto px-4 p-8">
+        {% if current_user.is_authenticated %}
+        <!-- You ARE LOGGED IN!!!<br>Enjoy! -->
+        {% else %}
+        <form id="reg-form" action="{{ url_for('auth.register') }}" method="post" class="flex flex-col md:flex-row items-center justify-center space-x-6 md:space-x-4 space-y-6 md:space-y-0">
+            <div class="flex-1 max-w-lg space-y-6">
+                <p class="text-3xl font-semibold text-gray-800">Warp in please ...</p>
+                <!-- Register Form -->
+                {% include 'auth/blocks/register_form.html' %}
+                <span id="message" class="text-red-500"></span>
+                <button type="submit" class="bg-red-600 text-white py-3 px-6 rounded-lg w-full hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 mt-4">
+                    >Don't click< </button> </div> <!-- Illustration Section -->
+                        <div class="hidden md:block flex-1 max-w-sm">
+                            <img src="{{url_for('static', filename='ufo_linkversity.svg')}}" alt="Registration Illustration" class="">
+                        </div>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="max-w-screen-xl mx-auto px-4 p-8">
+      <div class="text-center py-12">
+    <h2 class="text-4xl font-bold text-gray-800 m-4">
+        Explore latest
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {%for path in get_last_5()%}
+            <a href="{{path.get_url()}}">
+                <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex items-center gap-4">
+                        <i class="em {{path.path_user.emoji_class}} w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"></i>
+                        <div class="font-medium dark:text-white">
+                            <div>{{ path.slug }}</div>
+                            <div class="text-left text-sm text-gray-500 dark:text-gray-400">{{path.path_user.username}}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {%endfor%}
+        </div>
+</div>
         
     </div>
-    <hr>
-    <div class="container">
-      <h2>Latest Courses</h2><br>
-      <div>
-        {%for path in get_last_5()%}
-          <div class="card link p-2 mb-2 shadow-sm">
-          <div class="card-body pt-0 border-bottom-0 p-0 m-0" >
-            <div class="row p-0 m-0" >
-              <div class="col-11 p-0 m-0">
-                <p class="m-0 link-outer p-0 m-0">
-                  <b>
-                    <a href="{{url_for("www.user_profile", username=path.path_user.username)}}"
-                        style="text-decoration: none;">
-                      <picture >
-                        <i class="em {{path.path_user.emoji_class}}" 
-                        style="width: 40px; height: 40px; border: 1px solid orange; padding: 5px;
-                        border-radius: 50%;"></i>
-                      </picture>
-                    </a>
-                    &nbsp;
-                    <a href="{{path.get_url()}}" class="p-0 m-0">{{path.path_user.username}} / {{ path.slug }}</a></b>
-                </p>
-              </div>
-              <div class="col-1 p-0 m-0">
-                <div class="card-footer bg-white p-0 border-top-0">
-                  <a href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=url_for('www.index')) }}"><i 
-                    class="fa fa-heart heart-icon {{ 'liked' if current_user in path.like_list.users else '' }}"></i></a>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-          
-        </div>
-        {%endfor%}
-      </div>
-    </div>
-</div>
+    <script>
+    const form = document.getElementById('reg-form');
+    const password1 = document.getElementById('password-1');
+    const password2 = document.getElementById('password-2');
+    const message = document.getElementById('message');
 
 
-<script>
-        const form = document.getElementById('reg-form');
-        const password1 = document.getElementById('password-1');
-        const password2 = document.getElementById('password-2');
-        const message = document.getElementById('message');
+    // Optional: Provide live feedback as the user types
+    password2.addEventListener('input', function() {
+        if (password1.value === password2.value) {
+            // message.textContent = "Passwords match!";
+            // message.className = "success";
 
-
-        // Optional: Provide live feedback as the user types
-        password2.addEventListener('input', function () {
-            if (password1.value === password2.value) {
-                // message.textContent = "Passwords match!";
-                // message.className = "success";
-
-              elements = document.getElementsByClassName('password');
-              for (var i = 0; i < elements.length; i++) {
-                  elements[i].style.backgroundColor="#54fc7b";
-              }
-
-            } else {
-                // message.textContent = "Passwords do not match.";
-                // message.className = "error";
-              elements = document.getElementsByClassName('password');
-              for (var i = 0; i < elements.length; i++) {
-                  elements[i].style.backgroundColor="#ff9292";
-              }
-
+            elements = document.getElementsByClassName('password');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.backgroundColor = "#54fc7b";
             }
-        });
-        password1.addEventListener('input', function () {
-            if (password1.value === password2.value) {
-                // message.textContent = "Passwords match!";
-                // message.className = "success";
 
-              elements = document.getElementsByClassName('password');
-              for (var i = 0; i < elements.length; i++) {
-                  elements[i].style.backgroundColor="#54fc7b";
-              }
-
-            } else {
-                // message.textContent = "Passwords do not match.";
-                // message.className = "error";
-              elements = document.getElementsByClassName('password');
-              for (var i = 0; i < elements.length; i++) {
-                  elements[i].style.backgroundColor="#ff9292";
-              }
-
+        } else {
+            // message.textContent = "Passwords do not match.";
+            // message.className = "error";
+            elements = document.getElementsByClassName('password');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.backgroundColor = "#ff9292";
             }
-        });
+
+        }
+    });
+    password1.addEventListener('input', function() {
+        if (password1.value === password2.value) {
+            // message.textContent = "Passwords match!";
+            // message.className = "success";
+
+            elements = document.getElementsByClassName('password');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.backgroundColor = "#54fc7b";
+            }
+
+        } else {
+            // message.textContent = "Passwords do not match.";
+            // message.className = "error";
+            elements = document.getElementsByClassName('password');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.backgroundColor = "#ff9292";
+            }
+
+        }
+    });
     </script>
-{%endblock%}
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+{%set active_page='home'%}
+{%extends 'linkolearn_theme/templates/base.html'%}
+
+{%block head%}
+<title>Learn By Links</title>
+<link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
+<style type="text/css">
+  .link-outer a{
+    color: #0366d6;
+    font-size: 30px;
+  }
+  .link .heart-icon {
+    line-height: 50px;
+    font-size: 20px;
+    color: #6a737d;
+  }
+  .liked{
+    color: #22b24c !important;
+  }
+  .highlight{
+    background-color: rgba(255, 255, 0, 0.959);
+    font-weight: bold;
+  }
+  .profile-icon{
+    border: 5px solid salmon;
+    width: 100px; height: 100px; padding: 10px;
+    border-radius: 50%;
+  }
+</style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{%endblock%}
+{%block body%}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+          <div class="p-3">
+            {% if current_user.is_authenticated %}
+
+            You ARE LOGGED IN!!!<br>Enjoy!
+
+            {%else%}
+            <form id="reg-form" action="{{url_for('auth.register')}}" method="post">
+                    {%include 'auth/blocks/register_form.html'%}
+                    <span id="message"></span>
+                </form>
+            {%endif%}
+          </div>
+          
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-8">
+             <div class="p-5">
+              <h1>Linkversity allows people to create courses from links around the internet. </h1>
+               <i>
+                 
+                 Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.<br><br>
+                 It is particularly useful for the <span class="highlight">Education</span> 
+                 sector and <span class="highlight">OpenSource</span> projects to get 
+                 contributors started quickly. It can be used as a 
+                 <span class="highlight">knowledge base</span>. It was inspired by works done on 
+                 <a href="https://web.lumosql.org/">LumoSQL</a><br><br>
+                 It can also be used as a research bookmark manager!<br><br>
+               </i>
+               - Emails no longer needed!<br>
+               - Private / Public feature<br>
+               - Password-protected pages<br>
+               - Share without needing login<br>
+               - Markdown support
+               <br>
+               <a href="https://drive.google.com/uc?id=14pJVwsPphH7duiap_jdcDJg668e7ieCx&export=download
+" target="_blank">[ Download on Android ]</a>
+               <br><br>
+               <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+             </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-5">
+                <img src="{{url_for('static', filename='linkolearn.svg')}}" class="img-fluid" alt="Responsive image">
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+    </div>
+    <hr>
+    <div class="container">
+      <h2>Latest Courses</h2><br>
+      <div>
+        {%for path in get_last_5()%}
+          <div class="card link p-2 mb-2 shadow-sm">
+          <div class="card-body pt-0 border-bottom-0 p-0 m-0" >
+            <div class="row p-0 m-0" >
+              <div class="col-11 p-0 m-0">
+                <p class="m-0 link-outer p-0 m-0">
+                  <b>
+                    <a href="{{url_for("www.user_profile", username=path.path_user.username)}}"
+                        style="text-decoration: none;">
+                      <picture >
+                        <i class="em {{path.path_user.emoji_class}}" 
+                        style="width: 40px; height: 40px; border: 1px solid orange; padding: 5px;
+                        border-radius: 50%;"></i>
+                      </picture>
+                    </a>
+                    &nbsp;
+                    <a href="{{path.get_url()}}" class="p-0 m-0">{{path.path_user.username}} / {{ path.slug }}</a></b>
+                </p>
+              </div>
+              <div class="col-1 p-0 m-0">
+                <div class="card-footer bg-white p-0 border-top-0">
+                  <a href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=url_for('www.index')) }}"><i 
+                    class="fa fa-heart heart-icon {{ 'liked' if current_user in path.like_list.users else '' }}"></i></a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+        {%endfor%}
+      </div>
+    </div>
+</div>
+
+
+<script>
+        const form = document.getElementById('reg-form');
+        const password1 = document.getElementById('password-1');
+        const password2 = document.getElementById('password-2');
+        const message = document.getElementById('message');
+
+
+        // Optional: Provide live feedback as the user types
+        password2.addEventListener('input', function () {
+            if (password1.value === password2.value) {
+                // message.textContent = "Passwords match!";
+                // message.className = "success";
+
+              elements = document.getElementsByClassName('password');
+              for (var i = 0; i < elements.length; i++) {
+                  elements[i].style.backgroundColor="#54fc7b";
+              }
+
+            } else {
+                // message.textContent = "Passwords do not match.";
+                // message.className = "error";
+              elements = document.getElementsByClassName('password');
+              for (var i = 0; i < elements.length; i++) {
+                  elements[i].style.backgroundColor="#ff9292";
+              }
+
+            }
+        });
+        password1.addEventListener('input', function () {
+            if (password1.value === password2.value) {
+                // message.textContent = "Passwords match!";
+                // message.className = "success";
+
+              elements = document.getElementsByClassName('password');
+              for (var i = 0; i < elements.length; i++) {
+                  elements[i].style.backgroundColor="#54fc7b";
+              }
+
+            } else {
+                // message.textContent = "Passwords do not match.";
+                // message.className = "error";
+              elements = document.getElementsByClassName('password');
+              for (var i = 0; i < elements.length; i++) {
+                  elements[i].style.backgroundColor="#ff9292";
+              }
+
+            }
+        });
+    </script>
+{%endblock%}
