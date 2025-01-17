@@ -1,0 +1,52 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500" style="width: 164px;" id="alienSVG">
+    <style type="text/css">
+        .st0_alien-2-89 {fill:#9C6FCE;}
+        .st1_alien-2-89 {fill:#1B661E;}
+        .st2_alien-2-89 {opacity:0.51;fill:#FFCF49;enable-background:new;}
+        .st3_alien-2-89 {fill:#21214F;}
+        .st4_alien-2-89 {opacity:0.2;fill:#FFFFFF;enable-background:new;}
+        .st5_alien-2-89 {fill:#FFCF49;}
+        .st6_alien-2-89 {fill:#71E3D1;}
+        .st7_alien-2-89 {opacity:0.3;fill:#21214F;enable-background:new;}
+        .st8_alien-2-89 {opacity:0.7;fill:#FFFFFF;enable-background:new;}
+        .st9_alien-2-89 {opacity:0.32;fill:#21214F;enable-background:new;}
+        .st10_alien-2-89 {fill:#68E1FD;}
+        .st11_alien-2-89 {opacity:0.46;fill:url(#SVGID_1_);enable-background:new;}
+        .st12_alien-2-89 {fill:#7F3500;}
+        .st13_alien-2-89 {fill:#52AF45;}
+
+        /* Animation for UFO */
+        #ufo_alien-2-89 {
+            animation: moveUFO 3s infinite ease-in-out;
+        }
+
+        @keyframes moveUFO {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-50px); opacity: 0.7; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Animation for Alien's eyes */
+        .st5_alien-2-89 {
+            animation: blinkEyes 1.5s infinite alternate;
+        }
+
+        @keyframes blinkEyes {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.8); }
+            100% { transform: scale(1); }
+        }
+    </style>
+
+    <g id="field_alien-2-89">
+        <path class="st0_alien-2-89" d="M256.8,409l212.7-125.7c6.8-3.8,12.6-10,6-14.1L262,146.1c-3.2-2-8.1-3.3-11.3-1.4L27.4,274.3c-6.8,3.9-8,14.9-1.2,18.9l202.6,115.6C237.4,413.8,248,413.9,256.8,409z"/>
+        <ellipse class="st1_alien-2-89" cx="245.2" cy="294.5" rx="116.2" ry="47"/>
+    </g>
+    <g id="ufo_alien-2-89">
+        <path class="st2_alien-2-89" d="M174.8,142.1l-44.6,137.3c-1.9,5.9-2.6,15.8-0.1,21.5c8.1,18.5,42.2,42.2,123.7,40.7c76.1-1.4,107.6-29.4,107.8-45c0.1-5.1,0.3-10.3-0.5-13l-43-147.7"/>
+        <ellipse class="st3_alien-2-89" cx="248.6" cy="144" rx="75.6" ry="39.7"/>
+        <circle class="st5_alien-2-89" cx="189" cy="132.2" r="4.2"/>
+        <circle class="st5_alien-2-89" cx="307.7" cy="132.2" r="4.2"/>
+        <path class="st6_alien-2-89" d="M203,133.9c0,0,1.1-46.5,45.6-46.5c45.5,0,44.6,45,44.6,45s-2,24.2-45.6,24.2S203,133.9,203,133.9z"/>
+    </g>
+</svg>
