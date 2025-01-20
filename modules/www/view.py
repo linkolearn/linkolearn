@@ -54,8 +54,8 @@ def index():
         try:
             paths = Path.query.all()
             paths = [p for p in paths if p.is_visible]
-            if len(paths) >= 5:
-                return paths[-6:-1]
+            if len(paths) >= 10:
+                return paths[-11:-1]
             else:
                 len_paths = len(paths) +1
                 return paths[:len_paths]
