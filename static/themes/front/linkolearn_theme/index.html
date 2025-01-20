@@ -1,48 +1,19 @@
-<!doctype html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="keywords" content="linkolearn, learn links, open source, courses" />
-    <meta name="description" content="Create courses using links" />
-    <link rel="icon" href="{{url_for('static', filename='linkversity.png')}}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-    <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
-</head>
-
-<body>
-    <nav class="bg-white border-gray-200 dark:bg-gray-900 p-8">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
-                </svg>
-            </button>
-            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                    {% if current_user.is_authenticated %}
-                    <li>
-                        <a href="{{url_for('www.user_profile', username=current_user.username)}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Profile</a>
-                    </li>
-                    <li>
-                        <a href="{{url_for('auth.logout')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign out</a>
-                    </li>
-                    {% else %}
-                    <li>
-                        <a href="{{url_for('auth.login')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign in</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+{%extends 'linkolearn_theme/templates/base.html'%}
+{%set active_page='home'%}
+{%block head%}
+<title>Learn by links</title>
+{%endblock%}
+{%block body%}
     <div class="max-w-screen-xl mx-auto px-4 p-8">
+
         <div class="flex flex-col md:flex-row items-center justify-between">
             <div class="text-left md:w-1/2">
+                <!-- Product Hunt on Mobile -->
+<div class="block md:hidden">
+    <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank">
+        <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
+    </a><br>
+</div>
                 <p class="text-6xl font-bold">Organize links like a PRO</p><br><br>
                 <p class="text-xl">Opensource | Businesses | Personal</p><br><br>
                 <a href="{{url_for('new.index')}}">
@@ -62,7 +33,13 @@
             <div class="text-left w-full md:w-2/3 p-8 m-8">
                 <p class="text-4xl font-bold">A tool to ramp up quickly on a topic</p><br><br>
                 <p class="text-xl">Linkversity allows people to create courses from links around the internet.
-                    Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.</p><br><br>
+                    Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.
+
+                    <br><br>
+
+                    And it's <a target="_blank" href="https://github.com/linkversity/linkversity" class="underline">OpenSource</a>
+                  </p><br><br>
+
             </div>
         </div>
     </div>
@@ -72,19 +49,19 @@
             <!-- Item 1 -->
             <div class="flex flex-col items-center w-full md:w-1/3">
                 <img src="{{url_for('static', filename='discover_linkversity.svg')}}" alt="Image 1" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold">Discover useful collections</p>
+                <p class="text-2xl font-semibold m-4">Discover useful collections</p>
                 <p class="text-base">Discover what people have created and bookmark them!</p>
             </div>
             <!-- Item 2 -->
             <div class="flex flex-col items-center w-full md:w-1/3">
                 <img src="{{url_for('static', filename='collab_linkversity.svg')}}" alt="Image 2" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold">Collaborate with teams</p>
+                <p class="text-2xl font-semibold m-4">Collaborate with teams</p>
                 <p class="text-base">Allow your friends to add links to collections for serious works</p>
             </div>
             <!-- Item 3 -->
             <div class="flex flex-col items-center w-full md:w-1/3">
                 <img src="{{url_for('static', filename='security_linkversity.svg')}}" alt="Image 3" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold">Protect your links</p>
+                <p class="text-2xl font-semibold m-4">Protect your links</p>
                 <p class="text-base">With varying levels of privacy, you can restrict access. Set visibility and password-protect collections</p>
             </div>
         </div>
@@ -122,7 +99,7 @@
                     <div class="flex items-center gap-4">
                         <i class="em {{path.path_user.emoji_class}} w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"></i>
                         <div class="font-medium dark:text-white">
-                            <div>{{ path.slug }}</div>
+                            <div class="text-left w-40 overflow-hidden whitespace-nowrap text-ellipsis">{{ path.slug }}</div>
                             <div class="text-left text-sm text-gray-500 dark:text-gray-400">{{path.path_user.username}}</div>
                         </div>
                     </div>
@@ -182,6 +159,4 @@
         }
     });
     </script>
-</body>
-
-</html>
+{% endblock %}
