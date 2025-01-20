@@ -2,166 +2,90 @@
 {%extends 'linkolearn_theme/templates/base.html'%}
 {%block head%}
 <title>{{user.username}}</title>
-<link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
-<style type="text/css">
-	.profile-icon{
-		font-size: 50px;
-		border: 1px solid orange; 
-		width: 9vw; height: 9vw; 
-		border-radius: 50%;
-	}
-	.profile-name{
-		font-size: 25px;
-	}
-	.profile-repo{
-		font-size: 25px !important;
-	}
-	.info-icon i{
-		color: #6a737d;
-	}
-	
-	.link-outer a{
-		color: #0366d6;
-		font-size: 30px;
-	}
-	.link .heart-icon {
-		line-height: 50px;
-		font-size: 20px;
-		color: #6a737d;
-	}
-	.liked{
-		color: #22b24c !important;
-	}
-	.unliked{
-		color: rgb(197, 197, 197);
-	}
-	@media only screen and (max-width: 600px) {
-		.profile-icon{
-			width: 15vw; height: 15vw;
-		}
-		.profile-name{
-			font-size: 10px;
-		}
-		.profile-repo{
-			font-size: 10px !important;
-		}
-		.btn {
-			padding: 5px;
-		}
-	}
-</style>
 {%endblock%}
 {%block body%}
-<br>
-<br>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-3 ">
-			<div 
-			class="text-center">
-				<i 
-				style=""
-				class="em {{user.emoji_class}} profile-icon p-0 m-0 shadow"></i>
-			</div>
-			<br>
-			<br>
-			<div style="padding-left: 1vw;">
-				<p class="profile-name">{{user.first_name if user.first_name else 'First Name'}} <br> 
-					{{user.last_name if user.last_name else 'Last Name'}}</p>
-				<p class="profile-name"><b>{{user.username}}</b></p>
-			</div>
-			<!--
-			<p>About</p>
-			<div>
-				<div>
-					<div class="info-icon">
-						<i class="fa fa-envelope"></i>
-					</div>
-					<div>
-						
-					</div>
-				</div>
-				<div>
-					<div class="info-icon">
-						<i class="fa fa-link"></i>
-					</div>
-					<div>
-						
-					</div>
-				</div>
-				<div>
-					<div class="info-icon">
-						<i class="fab fa-twitter"></i>
-					</div>
-					<div>
-						
-					</div>
-				</div>
-			</div>-->
-		</div>
-		<div class="col-9">
-			<div>
-				<div>
-					 <button type="button" class="btn btn-primary">
-					  <span class="profile-repo">Paths </span> <span class="badge bg-secondary profile-repo">{{len(user.paths)}}</span>
-					</button>
-					<button type="button" class="btn btn-primary">
-						<span class="profile-repo">Likes </span>  <span class="badge bg-secondary profile-repo">{{len(user.user_like_lists)}}</span>
-					</button>
-				</div>
-			</div>
-			<br>
-			<br>
-			<br>
-			<div>
-				{%for path in user.paths%}
-				{%if path.is_visible%}
-				<div class="card p-2 link-outer shadow-sm mb-2">
-						<b>
-							<a 
-							href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=url_for('www.user_profile', username=path.path_user.username)) }}"
-							class="profile-repo link-repo"
-							>
-							<i 
-							class="fa fa-heart heart-icon 
-							{{ 'liked' if current_user in path.like_list.users else 'unliked' }}
-							profile-repo"></i></a>&nbsp;
-							<a 
-							href="{{path.get_url()}}" 
-							class="p-0 m-0 profile-repo">{{ path.slug }}</a>
-							
-						</b>
-					
-				</div>
-				{%else%}
-					{%if user == current_user%}
-						<div class="card p-2 link-outer shadow-sm mb-2">
-							<b>
-								<a 
-								href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=url_for('www.user_profile', username=path.path_user.username)) }}"
-								class="profile-repo link-repo"
-								>
-								<i 
-								class="fa fa-heart heart-icon 
-								{{ 'liked' if current_user in path.like_list.users else 'unliked' }}
-								profile-repo"></i> 
-								</a>
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg flex flex-col md:flex-row min-h-[300px]">
+        <!-- Profile Section -->
+        <div class="w-full md:w-2/6 bg-gray-100 flex flex-col items-center p-6">
+            <i class="em {{user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
+            <h2 class="text-lg font-semibold">{{user.get_first_name()}}</h2>
+            <h2 class="text-lg font-semibold">{{user.get_last_name()}}</h2>
+            <span class="link">
+  <a href="{{current_user.get_profile_url()}}" class="text-blue-500 hover:text-blue-700">
+    @{{user.username}}
+  </a>
+</span>
 
-								&nbsp;
-								<a 
-								href="{{path.get_url()}}" 
-								class="p-0 m-0 profile-repo">{{ path.slug }}</a>
-								&nbsp;&nbsp;
-								<h6 style="display: inline;"><span class="badge badge-secondary">private</span></h6>
-								
-							</b>
-							
-						</div>
-					{%endif%}
-				{%endif%}
-				{%endfor%}
-			</div>
-		</div>
-	</div>
+
+            {%if user == current_user%}
+            <br>
+            <a href="/linkolearn/settings">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <i class="fa fa-wrench"></i>
+                </button>
+            </a>
+            {%endif%}
+        </div>
+        <!-- Info Section -->
+        <div class="w-full md:w-4/6 flex flex-col flex-grow">
+            <!-- Top Section -->
+            <div class="p-6 border-b flex-grow">
+                <p class="text-gray-600 text-sm">
+                    <div class="inline-flex items-center gap-2 bg-green-100 text-green-600 text-sm font-medium px-3 py-1 rounded-full">
+                        <i class="fas fa-folder-open"></i> <!-- Folder icon for collections -->
+                        <span>{{len(user.paths)}} Collections</span>
+                    </div>
+
+                     <div class="inline-flex items-center gap-2 bg-blue-100 text-red-600 text-sm font-medium px-3 py-1 rounded-full">
+                        <i class="fas fa-heart"></i> <!-- FontAwesome icon for collections -->
+                        <span>{{len(user.user_like_lists)}} Likes</span>
+                    </div>
+                </p>
+            </div>
+            <!-- Bottom Section -->
+            <div class="p-6 flex-grow">
+                <div class="max-w-3xl mx-auto bg-white">
+                    <!-- Card Title -->
+<!--                     <h2 class="text-xl font-semibold text-gray-800">My Favorite Links</h2>
+                    <p class="text-gray-600 text-sm mt-1">A collection of useful resources.</p> -->
+                    <!-- Links List -->
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {% for path in user.paths %}
+                            {% if  not path.is_visible %} 
+                                {%if user==current_user%}
+                                <div class="flex items-center gap-3 bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition cursor-pointer">
+                                    <!-- Link (Only the text is clickable now) -->
+                                    <a href="{{ path.get_url() }}" class="text-blue-600 font-medium hover:underline">
+                                        {{ path.slug }}
+                                    </a>
+                                    <!-- Lock Icon (Only appears if the link is protected) -->
+                                    {% if path.is_password_protected %}
+                                    <i class="fas fa-lock text-gray-500 text-sm"></i>
+                                    {%else%}
+                                    {% endif %}
+                                    <!-- Lock Icon (Only appears if the link is protected) -->
+                                    {% if path.is_visible %}
+                                    {%else%}
+                                    <i class="fas fa-eye-slash text-gray-500 text-sm"></i>
+                                    {% endif %}
+                                </div>
+                                {%endif%}
+
+                            {%else%}
+                                <div class="flex items-center gap-3 bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition cursor-pointer">
+                                    <!-- Link (Only the text is clickable now) -->
+                                    <a href="{{ path.get_url() }}" class="text-blue-600 font-medium hover:underline">
+                                        {{ path.slug }}
+                                    </a>
+                                    
+                                </div>
+                            {%endif%}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {%endblock%}
