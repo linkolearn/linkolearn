@@ -13,8 +13,8 @@ crossorigin="anonymous"></script>
         <!-- Profile Section -->
         <div class="w-full md:w-1/6 bg-gray-100 flex flex-col items-center p-6">
             <i class="em {{user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
-            <h2 class="text-lg font-semibold text-center">First Name</h2>
-            <h2 class="text-lg font-semibold text-center">Last Name</h2>
+            <h2 class="text-lg font-semibold text-center">{{path.path_user.get_first_name()}}</h2>
+            <h2 class="text-lg font-semibold text-center">{{path.path_user.get_last_name()}}</h2>
             {%if path.path_user == current_user%}
             <br>
             <a href="/linkolearn/settings">
@@ -122,8 +122,8 @@ function section(section_id) {
     </div>`;
 }
 
-  var min_sections = {{path.sections[0].id}};
-  var current_section_id = {{path.sections[-1].id}}+1;
+  var min_sections = 1;
+  var current_section_id = 1+1;
   var sections_div = $('#sections');
   var add_section_btn = $('#add-section-btn');
   var rem_section_btn = $('#rem-section-btn');
@@ -204,7 +204,7 @@ function section(section_id) {
 
     $.ajax({
         type: "POST",
-        url: "/linkolearn/settings/p/6/edit",
+        url: "/linkolearn/settings/p/{{path.id}}/edit",
         data: JSON.stringify(json_submit),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -212,7 +212,8 @@ function section(section_id) {
             // alert(data);
             // window.location.reload();
             if('error'in data){
-              alert('Permission error!')
+              alert('Permission error!');
+              alert(JSON.stringify(data));
             }
             window.location.href = data['goto'];
             return false;
