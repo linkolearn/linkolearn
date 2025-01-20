@@ -1,98 +1,127 @@
-{%set active_page='new'%}
+{%set active_page='path'%}
 {%extends 'linkolearn_theme/templates/base.html'%}
 {%block head%}
-<title>Learn By Links</title>
-<style type="text/css">
-  label{
-    font-weight: bold;
-  }
-</style>
+<title>{{path.slug.replace('-', ' ')}}</title>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+crossorigin="anonymous"></script>
 {%endblock%}
 {%block body%}
-<div class="container">  
-  <h3>Edit path</h3>
-  <form class="form">
-
-    <label for="path-link" class="form-label">Path Link</label>
-    <div class="row g-3 align-items-center">
-      <div class="col-auto pe-0 me-0">
-
-        <span for="" class="col-form-label">/{{current_user.username}}/</span>
-      </div>
-      <div class="col-auto">
-        <input type="text" id="path-link" class="form-control" value="{{path.slug}}"> e.g mastering-advanced-english
-      </div>
-    </div>
-  </nav>
-
-    <h4>Sections</h4>
-    <div class="">
-      <button 
-        class="btn btn-success rounded-circle d-inline-block p-0" 
-        style="width: 40px; height: 40px"
-        type="button"
-        id="add-section-btn">
-        <i 
-          class="fa fa-plus" 
-          class="m-0" 
-          style="font-size: 15px; vertical-align: middle; line-height: 25px"></i>
-      </button>
-      <span>Add Section</span>
-    </div>
-    <br>
-    <div id="sections">
-      {%set last_id = namespace(last_id=0)%}
-      {%for section in path.sections%}
-        <div id="section-{{section.id}}" class="section card mb-2 shadow-sm">
-          <div class="card-header">
-            <span class="badge bg-danger">
-              <button 
-                id="close-{{section.id}}" 
-                type="button" 
-                class="btn-close btn-close-section" 
-                aria-label="Close"></button>
-          </div>
-          <div class="card-body">
-            <label class="form-label">Section name</label>
-            <input id="section-title-{{section.id}}" type="text"  class="form-control section-title" value="{{ section.title }}">
-            <label class="form-label">Links</label>
-            <textarea class="form-control section-links" rows="10">{{sectionlinks2str(section.links) | safe}}</textarea>
-          </div>
+{%set user=path.path_user%}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg flex flex-col md:flex-row min-h-[300px]">
+        <!-- Profile Section -->
+        <div class="w-full md:w-1/6 bg-gray-100 flex flex-col items-center p-6">
+            <i class="em {{user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
+            <h2 class="text-lg font-semibold text-center">First Name</h2>
+            <h2 class="text-lg font-semibold text-center">Last Name</h2>
+            {%if path.path_user == current_user%}
+            <br>
+            <a href="/linkolearn/settings">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <i class="fa fa-wrench"></i>
+                </button>
+            </a>
+            {%endif%}
         </div>
-        {%set last_id.last_id = section.id%}
-      {%endfor%}
+        <!-- Info Section -->
+        <div class="w-full md:w-5/6 flex flex-col flex-grow">
+            <!-- Top Section -->
+            <div class="p-6 border-b flex-grow">
+                {% set username = path.path_user.username %}
+                <h3 class="text-3xl font-semibold text-gray-800">
+                    <a href="{{ url_for('www.user_profile', username=username) }}" class="text-blue-600 hover:text-blue-800">
+                        {{ username }}
+                    </a>
+                    <span class="text-gray-600">/ {{ path.slug }}</span>
+                </h3>
+                <br>
+                <div class="space-y-2">
+
+                        <button id="add-section-btn" type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2">
+                            <i class="fa fa-plus"></i>&nbsp;
+
+                            Add section
+                            </button>
+                </div>
+            </div>
+            <!-- Bottom Section -->
+            <div class="p-6 flex-grow">
+<form class="space-y-6">
+
+
+    <div class="flex items-center space-x-2">
+        <span class="text-gray-500 text-sm">/{{current_user.username}}/</span>
+        <input type="text" id="path-link" class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full" value="{{path.slug}}" placeholder="e.g mastering-advanced-english">
+    </div>
+
+    <h4 class="text-lg font-semibold text-gray-800">Sections</h4>
+
+    <div id="sections" class="space-y-4">
+        {% set last_id = namespace(last_id=0) %}
+        {% for section in path.sections %}
+        <div id="section-{{section.id}}" class="section bg-white shadow-md rounded-lg border border-gray-200">
+            <div class="bg-red-500 text-white px-4 py-2 rounded-t-lg flex justify-end">
+                <button 
+                    id="close-{{section.id}}" 
+                    type="button" 
+                    class="text-white hover:text-gray-300 focus:outline-none btn-close-section">
+                    &times;
+                </button>
+            </div>
+            <div class="p-4 space-y-3">
+                <label class="block text-sm font-medium text-gray-700">Section name</label>
+                <input id="section-title-{{section.id}}" type="text" class="section-title border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full text-sm" value="{{ section.title }}">
+                
+                <label class="block text-sm font-medium text-gray-700">Links</label>
+                <textarea class="section-links border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full text-sm" rows="5">{{ sectionlinks2str(section.links) | safe }}</textarea>
+            </div>
+        </div>
+        {% set last_id.last_id = section.id %}
+        {% endfor %}
     </div>
 
     <button 
-      class="btn btn-primary" 
-      type="button"
-      id="submit-button"
-      >submit</button>
-  </form>
-  
+        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full sm:w-auto"
+        type="button"
+        id="submit-button">
+        Submit
+    </button>
+</form>
+
+            </div>
+        </div>
+    </div>
 </div>
 
+
+
 <script type="text/javascript">
-  function section(section_id) {
-    return `
-<div id="section-${section_id}" class="section card mb-2 shadow-sm">
-  <div class="card-header">
-    <span class="badge bg-danger">
-      <button 
-        id="close-${section_id}" 
-        type="button" 
-        class="btn-close btn-close-section" 
-        aria-label="Close"></button>
-  </div>
-  <div class="card-body">
-    <label class="form-label">Section name</label>
-    <input id="section-title-${section_id}" type="text"  class="form-control section-title">
-    <label class="form-label">Links</label>
-    <textarea class="form-control section-links" rows="10" placeholder="http://www.x.com&#10;http://www.y.com&#10;[Some text](http://www.z.com)"></textarea>
-  </div>
-</div>
-`
-  }
+function section(section_id) {
+  return `
+    <div id="section-${section_id}" class="bg-white shadow-md rounded-lg border border-gray-200 section">
+      <div class="bg-red-500 text-white px-4 py-2 rounded-t-lg flex justify-end">
+        <button 
+          id="close-${section_id}" 
+          type="button" 
+          class="text-white hover:text-gray-300 focus:outline-none btn-close-section">
+          &times;
+        </button>
+      </div>
+      <div class="p-4 space-y-3">
+        <label class="block text-sm font-medium text-gray-700">Section name</label>
+        <input id="section-title-${section_id}" type="text" 
+          class="section-title border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full text-sm">
+        
+        <label class="block text-sm font-medium text-gray-700">Links</label>
+        <textarea class="section-links border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full text-sm" 
+          rows="5"
+          placeholder="http://www.x.com&#10;http://www.y.com&#10;[Some text](http://www.z.com)">
+        </textarea>
+      </div>
+    </div>`;
+}
+
   var min_sections = {{path.sections[0].id}};
   var current_section_id = {{path.sections[-1].id}}+1;
   var sections_div = $('#sections');
@@ -107,6 +136,8 @@
   add_section_btn.click(function() {
     sections_div.append( section(current_section_id) );
     current_section_id += 1;
+
+
   });
 
 
@@ -121,7 +152,7 @@
     var section_title = $('#section-title-' + id_to_del).val();
     if (id_to_del != min_sections){
       var to_delete = confirm("Do you want to delete the section with title: "+section_title);
-      var delete_target = $(this).parent().parent().parent();
+      var delete_target = $(this).parent().parent();
       if (to_delete){
         var id_to_del = parseInt(id_to_del);
         
@@ -173,7 +204,7 @@
 
     $.ajax({
         type: "POST",
-        url: "{{url_for('linkolearn.edit_path', path_id=path.id)}}",
+        url: "/linkolearn/settings/p/6/edit",
         data: JSON.stringify(json_submit),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -199,4 +230,5 @@
     });
 
 </script>
+
 {%endblock%}
