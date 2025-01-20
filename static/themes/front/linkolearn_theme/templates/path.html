@@ -2,145 +2,211 @@
 {%extends 'linkolearn_theme/templates/base.html'%}
 {%block head%}
 <title>{{path.slug.replace('-', ' ')}}</title>
-<style type="text/css">
-	 .stat-elem a, a:hover,a:visited, a:focus {
-	    text-decoration:none;
-	}
-	.stat-icon {
-		color: #FFF;
-	}
-	.links{
-	
-	}
-	.links a {
-		
-		border-bottom: 1px solid orange;
-		color: rgb(59, 95, 255);
-	}
-</style>
 {%endblock%}
 {%block body%}
-<br>
-<br>
-<div class="container">
-	<div class="text-right">
-		{%if current_user == path.path_user%}
-		<a href="{{ url_for('linkolearn.edit_path', path_id=path.id) }}">
-			<button class="btn btn-danger">
-				<i class="fa fa-pencil-alt"></i>
-			</button>
-		</a>
-		<a href="{{ url_for('linkolearn.delete_path', path_id=path.id) }}">
-			<button class="btn btn-warning" style="background-color: red; color: white"
-				onclick="return confirm('Are you sure you want to delete this item?');">
-				<i class="fa fa-trash"></i>
-			</button>
-		</a>
-			{%if path.is_visible%}
-			<a href="{{ url_for('linkolearn.toggle_visibility', path_id=path.id, next=path.get_url()) }}">
-				<button class="btn btn-success">
-					<i class="fa fa-globe-africa"></i>
-				</button>
-			</a>
-			{%else%}
-			<a href="{{ url_for('linkolearn.toggle_visibility', path_id=path.id, next=path.get_url()) }}">
-				<button class="btn btn-info">
-					<i class="fa fa-globe-africa"></i>
-				</button>
-			</a>
-			{%endif%}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg flex flex-col md:flex-row min-h-[300px]">
+        <!-- Profile Section -->
+        <div class="w-full md:w-1/6 bg-gray-100 flex flex-col items-center p-6">
+            <i class="em {{user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
+            <h2 class="text-lg font-semibold">{{path.path_user.get_first_name()}}</h2>
+            <h2 class="text-lg font-semibold">{{path.path_user.get_last_name()}}</h2>
+            <span class="link">
+  <a href="{{current_user.get_profile_url()}}" class="text-blue-500 hover:text-blue-700">
+    @{{path.path_user.username}}
+  </a>
+</span>
+            {%if path.path_user == current_user%}
+            <br>
+            <a href="/linkolearn/settings">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <i class="fa fa-wrench"></i>
+                </button>
+            </a>
+            {%endif%}
+        </div>
+        <!-- Info Section -->
+        <div class="w-full md:w-5/6 flex flex-col flex-grow">
+            <!-- Top Section -->
+            <div class="p-6 border-b flex-grow">
+                {% set username = path.path_user.username %}
+                <h3 class="text-3xl font-semibold text-gray-800">
+                    <a href="{{ url_for('www.user_profile', username=username) }}" class="text-blue-600 hover:text-blue-800">
+                        {{ username }}
+                    </a>
+                    <span class="text-gray-600">/ {{ path.slug }}</span>
+                </h3>
+                <br>
+                
+                <div class="space-y-2">
+                    <a href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=path.get_url()) }}" class="inline-flex">
+    <!-- Like Button -->
+    <button type="button" 
+        class="text-white font-medium text-xs p-1.5 text-center inline-flex items-center 
+        rounded-br-none rounder-tr-none rounded-bl-md rounded-tl-md
+        {% if current_user in path.like_list.users %} bg-green-600 hover:bg-green-700 focus:ring-2 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800 
+        {% else %} bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800 {% endif %}">
+        <i class="fa fa-heart text-xs"></i>
+        <span class="sr-only">Like</span>
+    </button>
+    
+    <!-- Like Count Button -->
+    <button type="button" 
+        class="p-1.5 text-xs font-medium inline-flex items-center bg-white text-gray-700 border 
+        rounded-tr-md rounded-br-md rounded-tl-none rounded-bl-none
+        {% if current_user in path.like_list.users %} border-green-600 focus:ring-2 focus:ring-green-300 dark:border-green-500 dark:focus:ring-green-800 
+        {% else %} border-blue-600 focus:ring-2 focus:ring-blue-300 dark:border-blue-500 dark:focus:ring-blue-800 {% endif %}">
+        {{ len(path.like_list.users) }}
+    </button>
+</a>
 
 
-			<a href="#" class="stat-elem">
-			<div class="btn-group" role="group" aria-label="Basic example">
-			  <button id='pass-but' type="button" class="btn {{ 'btn-success' if path.is_password_protected else 'btn-info'}} text-reset"><i style="color: white !important" class="fa fa-key"></i></button >
-			  <input id="pass-input" type="password" class='btn  text-reset  bg-white text-dark'  style="border: 1px solid black; border-left: None;">
-			</div>
-		</a>
-		{%endif%}
-		<a href="{{ url_for('linkolearn.toggle_like', path_id=path.id, next=path.get_url()) }}" class="stat-elem">
-			<div class="btn-group" role="group" aria-label="Basic example">
-			  <button type="button" class="btn {{ 'btn-success' if current_user in path.like_list.users else 'btn-info'}} text-reset "><i class="fa fa-heart stat-icon"></i></button>
-			  <button type="button" class="btn {{ 'btn-success' if current_user in path.like_list.users else 'btn-info'}} text-reset  bg-white text-dark">{{ len(path.like_list.users) }}</button>
-			</div>
-		</a>
-		<a href="{{ url_for('linkolearn.toggle_bookmark', path_id=path.id, next=path.get_url()) }}" class="stat-elem">
-			<div class="btn-group" role="group" aria-label="Basic example">
-			  <button type="button" class="btn {{ 'btn-success' if current_user in path.bookmark_list.users else 'btn-info'}} text-reset "><i class="fa fa-bookmark stat-icon"></i></button>
-			  <button type="button" class="btn {{ 'btn-success' if current_user in path.bookmark_list.users else 'btn-info'}} text-reset  bg-white text-dark">{{ len(path.bookmark_list.users) }}</button>
-			</div>
-		</a>
-		
-	</div>
-	<div class="row">
-		<div class="col-9 ">
-			<div>
-				<div>
-					{% set username = path.path_user.username %}
-					 <h3><a href="{{ url_for('www.user_profile', username=username) }}">{{ username }}</a> / {{ path.slug }}</h3>
-					
-				</div>
-			</div>
-			<br>
-			<br>
-			{%if not path.is_password_protected%}
-				{% for section in path.sections %}
-					<h4>{{ section.title }}</h4>
-					<hr>
-					{% for link in section.links %}
-						{%if link.url.startswith('[') %}
-							{%set extract = path.extract_link(link.url)%}
-							<p class="links p-0 mb-1"><b>*</b> <a href="{{ extract.href }}"> {{ extract.text }}</a></p>
-						{%else%}
-						<p class="links p-0 mb-1"><b>*</b> <a href="{{ link.url }}"> {{ link.url }}</a></p>
-						{%endif%}
-					{% endfor %}
-					<br>
-					<br>
-				{% endfor %}
+<a href="{{ url_for('linkolearn.toggle_bookmark', path_id=path.id, next=path.get_url()) }}" class="inline-flex">
+    <!-- Bookmark Button -->
+    <button type="button" 
+        class="text-white font-medium text-xs p-1.5 text-center inline-flex items-center 
+        rounded-br-none rounded-tr-none rounded-bl-md rounded-tl-md
+        {% if current_user in path.bookmark_list.users %} bg-yellow-600 hover:bg-yellow-700 focus:ring-2 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-800 
+        {% else %} bg-gray-600 hover:bg-gray-700 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-800 {% endif %}">
+        <i class="fa fa-bookmark text-xs"></i>
+        <span class="sr-only">Bookmark</span>
+    </button>
+    
+    <!-- Bookmark Count Button -->
+    <button type="button" 
+        class="p-1.5 text-xs font-medium inline-flex items-center bg-white text-gray-700 border 
+        rounded-tr-md rounded-br-md rounded-tl-none rounded-bl-none
+        {% if current_user in path.bookmark_list.users %} border-yellow-600 focus:ring-2 focus:ring-yellow-300 dark:border-yellow-500 dark:focus:ring-yellow-800 
+        {% else %} border-gray-600 focus:ring-2 focus:ring-gray-300 dark:border-gray-500 dark:focus:ring-gray-800 {% endif %}">
+        {{ len(path.bookmark_list.users) }}
+    </button>
+</a>
 
-			{% else %}
-				{% if has_entered_password %}
-					{% for section in path.sections %}
-						<h4>{{ section.title }}</h4>
-						<hr>
-						{% for link in section.links %}
-						<p class="links p-0 mb-1"><b>*</b> <a href="{{ link.url }}"> {{ link.url }}</a></p>
-						{% endfor %}
-						<br>
-						<br>
-					{% endfor %}
-				{%else%}
+                {% if current_user == path.path_user %}
 
-					This is password protected! <br><br>
-					<form>
-				        <input id="check-pass-input" class="form-control" type="password" name="password" placeholder="Password" required><br>
-				        <input  type="hidden" name="csrf_token" value="{{csrf_token()}}">
-				        <button id="check-pass-but" class="btn btn-primary" >Submit</button>
-				    </form>
-			    {%endif%}
-			{%endif%}
-		</div>
-		<div class="col-3">
+                    <!-- Edit Path Button -->
+                    <a href="{{ url_for('linkolearn.edit_path', path_id=path.id) }}">
+                        <button type="button" class="text-white bg-red-600 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs p-1.5 text-center inline-flex items-center me-1 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800">
+                            <i class="fa fa-pencil-alt text-xs"></i>
+                            <span class="sr-only">Edit Path</span>
+                        </button>
+                    </a>
+                    <!-- Delete Path Button -->
+                    <a href="{{ url_for('linkolearn.delete_path', path_id=path.id) }}">
+                        <button type="button" class="text-white bg-red-600 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs p-1.5 text-center inline-flex items-center me-1 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="fa fa-trash text-xs"></i>
+                            <span class="sr-only">Delete Path</span>
+                        </button>
+                    </a>
+                    <!-- Toggle Visibility Button -->
+                    {% if path.is_visible %}
+                    <a href="{{ url_for('linkolearn.toggle_visibility', path_id=path.id, next=path.get_url()) }}">
+                        <button type="button" class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-md text-xs p-1.5 text-center inline-flex items-center me-1 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800">
+                            <i class="fa fa-globe-africa text-xs"></i>
+                            <span class="sr-only">Visible</span>
+                        </button>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('linkolearn.toggle_visibility', path_id=path.id, next=path.get_url()) }}">
+                        <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-xs p-1.5 text-center inline-flex items-center me-1 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                            <i class="fa fa-globe-africa text-xs"></i>
+                            <span class="sr-only">Not Visible</span>
+                        </button>
+                    </a>
+                    {% endif %}
+                    <!-- Password Protection Toggle -->
+                    <a href="#" class="stat-elem">
+                        <div class="inline-flex items-center">
+                            {%set pass_color = 'blue'%}
+                            {% if path.is_password_protected %}
+                                {%set pass_color = 'green'%}
+                            {%else%}
+                                {%set pass_color = 'blue'%}
+                            {%endif%}
 
-		</div>
-	</div>
+                            <button type="button" 
+                            id="pass-but" class="text-white bg-{{pass_color}}-600 hover:bg-{{pass_color}}-700 focus:ring-2 focus:outline-none focus:ring-{{pass_color}}-300 font-medium rounded-l-md text-xs p-1.5 text-center inline-flex items-center dark:bg-{{pass_color}}-500 dark:hover:bg-{{pass_color}}-500 dark:focus:ring-{{pass_color}}-800">
+                                <i class="fa fa-key text-xs"></i>
+                                <span class="sr-only">Password Protection</span>
+                            </button>
+                            <input id="pass-input" type="password" class="bg-white text-dark border border-gray-300 rounded-r-md p-1 focus:outline-none text-xs" placeholder="Password" style="border-left: none; margin-left: -1px;">
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+                
+            </div>
+            <!-- Bottom Section -->
+            <div class="p-6 flex-grow">
+                <div class="max-w-3xl mx-auto bg-white">
+                    {% if not path.is_password_protected %}
+                        {% for section in path.sections %}
+                        <h4 class="text-lg font-semibold text-gray-900">{{ section.title }}</h4>
+                        <br>
+                            {% for link in section.links %}
+                                {% if link.url.startswith('[') %}
+                                {% set extract = path.extract_link(link.url) %}
+                                <p class="links p-0 mb-1 text-sm text-blue-600 break-words">
+                                    <b class="text-gray-700">*</b>
+                                    <a href="{{ extract.href }}" class="hover:text-blue-800"> {{ extract.text }}</a>
+                                </p>
+                                {% else %}
+                                <p class="links p-0 mb-1 text-sm text-blue-600 break-words">
+                                    <b class="text-gray-700">*</b>
+                                    <a href="{{ link.url }}" class="hover:text-blue-800"> {{ link.url }}</a>
+                                </p>
+                                {% endif %}
+                            {% endfor %}
+                        <br><br>
+                        {% endfor %}
+                    {% else %}
+                    {% if has_entered_password %}
+                        {% for section in path.sections %}
+                        <h4 class="text-lg font-semibold text-gray-900">{{ section.title }}</h4>
+                        <br>
+                        {% for link in section.links %}
+                            {% if link.url.startswith('[') %}
+                                {% set extract = path.extract_link(link.url) %}
+                                <p class="links p-0 mb-1 text-sm text-blue-600 break-words">
+                                    <b class="text-gray-700">*</b>
+                                    <a href="{{ extract.href }}" class="hover:text-blue-800"> {{ extract.text }}</a>
+                                </p>
+                                {% else %}
+                                <p class="links p-0 mb-1 text-sm text-blue-600 break-words">
+                                    <b class="text-gray-700">*</b>
+                                    <a href="{{ link.url }}" class="hover:text-blue-800"> {{ link.url }}</a>
+                                </p>
+                                {% endif %}
+                        {% endfor %}
+                        <br><br>
+                        {% endfor %}
+                        {% else %}
+                        <div class="text-center text-gray-700">
+                            <p>This is password protected! </p>
+                            <form class="mt-4">
+                                <input id="check-pass-input" class="form-control p-2 border border-gray-300 rounded-md w-full" type="password" name="password" placeholder="Password" required><br>
+                                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                                <button id="check-pass-but" class="mt-3 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700">Submit</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 <script type="text/javascript">
-
-
-document.addEventListener("DOMContentLoaded", function () {
-	{%if current_user == path.path_user%}
+document.addEventListener("DOMContentLoaded", function() {
+    {% if current_user == path.path_user %}
 
     // Get the password button and input
     const passwordButton = document.querySelector("#pass-but");
     const passwordInput = document.querySelector("#pass-input");
-    
+
     // Attach event listener to the button
-    passwordButton.addEventListener("click", function () {
-    	event.preventDefault();
+    passwordButton.addEventListener("click", function() {
+        event.preventDefault();
 
         const pathId = "{{path.id}}"; // Assuming path_id is stored as a data attribute
         const password = passwordInput.value.trim();
@@ -148,15 +214,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Perform an AJAX POST request
         const formData = new FormData();
-		formData.append("password", password);  // Add password field
-		formData.append("csrf_token", '{{csrf_token()}}');  // Add CSRF token
+        formData.append("password", password); // Add password field
+        formData.append("csrf_token", '{{csrf_token()}}'); // Add CSRF token
         fetch(`{{url_for('linkolearn.toggle_password', path_id=path.id)}}`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": '{{csrf_token()}}'
-            },
-            body: formData,
-        })
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": '{{csrf_token()}}'
+                },
+                body: formData,
+            })
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -179,36 +245,37 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
 
-    {%endif%}
+    {% endif %}
 
-   
+
+    {% if path.is_password_protected %}
 
     {% if has_entered_password == False %}
 
     const passwordCheckButton = document.querySelector("#check-pass-but");
     const passwordCheckInput = document.querySelector("#check-pass-input");
-    
 
-    
-    passwordCheckButton.addEventListener("click", function (event) {
 
-    	event.preventDefault();
-    	const password = passwordCheckInput.value.trim();
-    	const formDataC = new FormData();
-		formDataC.append("password", password);  // Add password field
-		formDataC.append("csrf_token", '{{csrf_token()}}');  // Add CSRF token
+
+    passwordCheckButton.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        const password = passwordCheckInput.value.trim();
+        const formDataC = new FormData();
+        formDataC.append("password", password); // Add password field
+        formDataC.append("csrf_token", '{{csrf_token()}}'); // Add CSRF token
 
         const pathId = "{{path.id}}"; // Assuming path_id is stored as a data attribute
-        
+
 
         // Perform an AJAX POST request
         fetch(`{{url_for('linkolearn.check_password', path_id=path.id)}}`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": '{{csrf_token()}}'
-            },
-            body: formDataC,
-        })
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": '{{csrf_token()}}'
+                },
+                body: formDataC,
+            })
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -230,6 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 // alert("An error occurred while checking."+password);
             });
     });
+
+    {% endif %}
 
     {% endif %}
 
