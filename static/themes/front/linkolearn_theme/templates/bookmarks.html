@@ -1,24 +1,64 @@
 {%set active_page='bookmarks'%}
 {%extends 'linkolearn_theme/templates/base.html'%}
-
 {%block head%}
-<title>Learn By Links</title>
-<style type="text/css">
-  .link-outer a{
-    color: #0366d6;
-    font-size: 30px;
-  }
-</style>
+<title>{{current_user.username}}</title>
 {%endblock%}
 {%block body%}
-<br><br>
-<div class="container-fluid">
-    <h2>My Bookmarks</h2>
-    {%for bookmark_list in current_user.user_bookmark_lists%}
-    <p class="m-0 link-outer ps-5 m-0">
-      <b><a href="{{ bookmark_list.bookmark_list_path.get_url() }}">{{bookmark_list.bookmark_list_path.title}}</a></b>
-    </p>
-        
-    {%endfor%}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg flex flex-col md:flex-row min-h-[300px]">
+        <!-- Profile Section -->
+        <div class="w-full md:w-2/6 bg-gray-100 flex flex-col items-center p-6">
+            <i class="em {{current_user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
+            <h2 class="text-lg font-semibold">{{current_user.get_first_name()}}</h2>
+            <h2 class="text-lg font-semibold">{{current_user.get_last_name()}}</h2>
+
+
+            <br>
+            <a href="/linkolearn/settings">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <i class="fa fa-wrench"></i>
+                </button>
+            </a>
+
+        </div>
+        <!-- Info Section -->
+        <div class="w-full md:w-4/6 flex flex-col flex-grow">
+            <!-- Top Section -->
+            <div class="p-6 border-b flex-grow">
+                <h3 class="text-3xl font-semibold text-gray-800">
+                    Bookmarks
+                </h3>
+            </div>
+            <!-- Bottom Section -->
+            <div class="p-6 flex-grow">
+                <div class="max-w-3xl mx-auto bg-white">
+                    <!-- Card Title -->
+<!--                     <h2 class="text-xl font-semibold text-gray-800">My Favorite Links</h2>
+                    <p class="text-gray-600 text-sm mt-1">A collection of useful resources.</p> -->
+                    <!-- Links List -->
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {% for path in current_user.get_bookmarked_paths() %}
+                        <div class="flex items-center gap-3 bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition cursor-pointer">
+                            <!-- Link (Only the text is clickable now) -->
+                            <a href="{{ path.get_url() }}" class="text-blue-600 font-medium hover:underline">
+                                {{ path.slug }}
+                            </a>
+                            <!-- Lock Icon (Only appears if the link is protected) -->
+                            {% if path.is_password_protected %}
+                            <i class="fas fa-lock text-gray-500 text-sm"></i>
+                            {%else%}
+                            {% endif %}
+                            <!-- Lock Icon (Only appears if the link is protected) -->
+                            {% if path.is_visible %}
+                            {%else%}
+                            <i class="fas fa-eye-slash text-gray-500 text-sm"></i>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {%endblock%}
