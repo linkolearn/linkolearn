@@ -132,6 +132,38 @@ class User(UserMixin, PkModel):
         return True
 
 
+    def get_bookmarked_paths(self):
+        # Retrieve the user object
+        from modules.box__linkolearn.linkolearn.models import Path, BookmarkList, bookmark_list_user_bridge
+        user = self
+        
+        if user:
+            # Query the bookmark lists for the user, joining with Path directly
+            # This will get all bookmarked paths for the user, avoiding None entries
+            bookmarked_paths = db.session.query(Path).join(BookmarkList, BookmarkList.path_id == Path.id) \
+                .join(bookmark_list_user_bridge, bookmark_list_user_bridge.c.bookmark_list_id == BookmarkList.id) \
+                .filter(bookmark_list_user_bridge.c.user_id == user.id).all()
+            
+            return bookmarked_paths
+        else:
+            return None
+
+    def get_first_name(self):
+        if self.first_name in ['', None]:
+            return '-first name-'
+        else:
+            return self.first_name
+
+    def get_last_name(self):
+        if self.last_name in ['', None]:
+            return '-last name-'
+        else:
+            return self.last_name
+
+
+    def get_profile_url(self):
+        return f'/{self.username}'
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
