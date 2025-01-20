@@ -1,236 +1,108 @@
+<!doctype html>
+<html>
 
-<!DOCTYPE HTML>
-<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="keywords" content="linkolearn, learn links, open source, courses" />
-<meta name="description" content="Create courses using links" />
-<link rel="icon" href="{{url_for('static', filename='linkversity.png')}}">  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="linkolearn, learn links, open source, courses" />
+    <meta name="description" content="Create courses using links" />
+    <link rel="icon" href="{{url_for('static', filename='linkversity.png')}}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link href="https://emoji-css.afeld.me/emoji.css" rel="stylesheet">
 
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-crossorigin="anonymous"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YWMMBMPT7S"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
+      gtag('config', 'G-YWMMBMPT7S');
+    </script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-
-<script type="text/javascript">
-/// some script
-$(function () {
-      'use strict'
-
-    $("[data-trigger]").on("click", function(){
-        var trigger_id =  $(this).attr('data-trigger');
-        $(trigger_id).toggleClass("show");
-        $('body').toggleClass("offcanvas-active");
-    });
-
-    // close if press ESC button 
-    $(document).on('keydown', function(event) {
-        if(event.keyCode === 27) {
-           $(".navbar-collapse").removeClass("show");
-           $("body").removeClass("overlay-active");
-        }
-    });
-
-    // close button 
-    $(".btn-close").click(function(e){
-        $(".navbar-collapse").removeClass("show");
-        $("body").removeClass("offcanvas-active");
-    }); 
-
-
-})
-</script>
-
-<style type="text/css">
-
-body.offcanvas-active{
-    overflow:hidden;
-}
-.offcanvas-header{ display:none; }
-
-@media (max-width: 992px) {
-  .offcanvas-header{ display:block; }
-  .navbar-collapse {
-    position: fixed;
-    top:0; 
-    bottom: 0;
-    left: 100%;
-    width: 100%;
-    padding-right: 1rem;
-    padding-left: 1rem;
-    overflow-y: auto;
-    visibility: hidden;
-    background-color: black;
-    transition: visibility .2s ease-in-out, transform .2s ease-in-out;
-  }
-  .navbar-collapse.show {
-    visibility: visible;
-    transform: translateX(-100%);
-  }
-}
-
-</style>
-<style type="text/css">
-    #flashed-messages{
-        padding: 5px;
-        position: fixed;
-        right: 5px;
-        top: 5px;
-        z-index: 100;
-        height: 300px;
-        overflow-y: scroll;
-
-      }
-      #flashed-messages::-webkit-scrollbar {
-        display: none;
-      }
-      /* Hide scrollbar for IE and Edge */
-      #flashed-messages{
-        -ms-overflow-style: none;
-      }
-      .shopyo-alert{
-        z-index: 1500;
-      }
-</style>
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/journal/bootstrap.min.css" integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous">
-<style type="text/css">
-  a {
-    word-wrap: break-word;
-  }
-</style>
-
-<style type="text/css">
-.navbar .active{
-  color: white !important;
-  background-color: #d14642 !important;
-}
-
-.navbar{
-  padding-top: 0!important;
-  padding-bottom: 0!important;
-}
-
-.nav-link {
-  color: white !important;
-}
-</style>
-
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YWMMBMPT7S"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YWMMBMPT7S');
-</script>
-{%block head%}{%endblock%}
+    {%block head%}{%endblock%}
 </head>
+
 <body>
-  {%include 'base/blocks/flashed_messages.html'%}
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="z-index: 1500">
-  <a class="navbar-brand" href="/">LINKVERSITY</a>
-  <button class="navbar-toggler" type="button" data-trigger="#main_nav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="navbar-collapse" id="main_nav">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 {%if active_page=='home'%}p-8{%endif%}">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        {%if active_page=='home'%}
+        <!-- Hide Product Hunt on mobile screens -->
+        <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank" class="hidden md:block">
+            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
+        </a>
+        {%else%}
+        <a href="/" class="w-10 h-10">
+            <img src="{{url_for('static', filename='linkversity.png')}}">
+        </a>
+        {%endif%}
+        
+        <!-- Hamburger Button -->
+        <button id="burger-menu" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+            </svg>
+        </button>
 
-<div class="offcanvas-header mt-3">  
-    <button class="btn btn-outline-danger btn-close float-right btn-primary"> </button>
-    <h5 class="py-2 text-white">LINKVERSITY</h5>
-</div>
+        <!-- Menu -->
+        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{ url_for('new.index') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent
 
-<ul class="navbar-nav">
-    <li 
-      class="nav-item {{'active' if active_page == 'home'}}"
-      > 
-      <a 
-        class="nav-link" 
-        href="{{ url_for('www.index') }}">Home </a> </li>
-    <!--
-    <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
-    <li class="nav-item"><a class="nav-link" href="#"> Services </a></li>
-    <li class="nav-item dropdown">
-        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown">  More items  </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#"> Submenu item 1</a></li>
-          <li><a class="dropdown-item" href="#"> Submenu item 2 </a></li>
-        </ul>
-    </li>
-  -->
-</ul>
+                    {% if active_page == 'new' %}text-red-500{% endif %}
+                    ">Create</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('linkolearn.bookmarks') }}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent
 
-<ul class="navbar-nav ml-auto">
-    {%if current_user.is_authenticated and current_user.is_email_confirmed%}
+                    {% if active_page == 'bookmarks' %}text-red-500{% endif %}
+                    ">Bookmarks</a>
+                </li>
+                <li>
+                    <a href="{{url_for('www.user_profile', username=current_user.username)}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent
 
-    <li class="nav-item "><a class="nav-link" href="https://github.com/linkversity/linkversity/issues/new/choose" target="_blank"> <i class="fa fa-bug"></i> </a></li>
-
-    <li class="nav-item {{'active' if active_page == 'info'}}"><a class="nav-link" href="{{ url_for('www.info') }}"> <i class="fa fa-info"></i> </a></li>
-
-    <li class="nav-item {{'active' if active_page == 'bookmarks'}}"><a class="nav-link" href="{{ url_for('linkolearn.bookmarks') }}"> <i class="fa fa-bookmark"></i> </a></li>
-
-      <li class="nav-item {{'active' if active_page == 'settings'}}"><a class="nav-link" href="{{ url_for('linkolearn.settings') }}"> <i class="fa fa-wrench"></i> </a></li>
-
-      <li class="nav-item {{'active' if active_page == 'profile'}}"><a class="nav-link" href="{{url_for('www.user_profile', username=current_user.username)}}"> Profile </a></li>
-
-      <li class="nav-item {{'active' if active_page == 'new'}}"><a class="nav-link" href="{{url_for('new.index')}}"> <i class="fa fa-plus"></i> </a></li>
-      
-      <li class="nav-item"><a class="nav-link" href="{{url_for('auth.logout')}}"> <i class="fa fa-sign-out-alt"></i> </a></li>
-    {%else%}
-      <li class="nav-item {{'active' if active_page == 'profile'}}"><a class="nav-link" href="{{url_for('auth.login')}}"> Login </a></li>
-    {%endif%}
-    <!--
-    <div class="dropdown dropstart">
-      <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-plus"></i>
-      </button>
-      <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
+                    {% if active_page == 'profile' %}text-red-500{% endif %}
+                    ">Profile</a>
+                </li>
+                <li>
+                    <a href="{{url_for('auth.logout')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign out</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{url_for('auth.login')}}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Sign in</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-    -->
-</ul>
-  </div> <!-- navbar-collapse.// -->
 </nav>
 
-  {%block body%}{%endblock%}
-<br><br>
-<div style="height: 40px;">
-  
-</div>
 
 
-<footer class="bg-dark text-white text-center text-lg-start fixed-bottom p-0">
 
-    <!-- Row for Links -->
-    <div class="row">
-      <div class="col">
-        <ul class="list-unstyled mb-0">
-          <li>
-            <a href="https://github.com/linkolearn/linkolearn" class="text-white">
-              it's OpenSource!
-            </a>
-          </li>
-        </ul>
-      </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const burgerMenuButton = document.getElementById('burger-menu');
+    const navbar = document.getElementById('navbar-default');
 
-</div>
+    // Toggle the 'hidden' class to show/hide the menu on click
+    burgerMenuButton.addEventListener('click', function() {
+        navbar.classList.toggle('hidden');
+    });
+});
+</script>
 
-  <!-- Copyright Section -->
-<!--   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    © 2024 Company Name. All rights reserved.
-  </div> -->
-</footer>
+    {%include 'base/blocks/flashed_messages.html'%}
 
+
+    {%block body%}{%endblock%}
 </body>
+
 </html>
+
