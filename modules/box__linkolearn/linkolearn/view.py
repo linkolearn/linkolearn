@@ -240,6 +240,7 @@ def edit_path(path_id):
         json_submit = request.get_json()
         # path_title = json_submit['path_title']
         path_link = json_submit['path_link']
+        path_link = Path.slugify(path_link)
         sections = json_submit['sections']
         path.sections = []
         # path.title = path_title
