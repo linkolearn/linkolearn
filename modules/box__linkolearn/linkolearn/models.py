@@ -82,6 +82,12 @@ class Path(PkModel):
 
         return {} 
 
+    def slugify(title):
+        title = title.lower()
+        title = re.sub(r'[^a-z0-9\s]', '', title)
+        title = re.sub(r'\s+', '-', title)
+        return title
+
 
 like_list_user_bridge = db.Table(
     "like_list_user_bridge",
