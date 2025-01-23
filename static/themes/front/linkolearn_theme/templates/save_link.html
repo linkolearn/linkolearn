@@ -1,0 +1,150 @@
+{%set active_page='profile'%}
+{%extends 'linkolearn_theme/templates/base.html'%}
+{%block head%}
+<title>{{user.username}}</title>
+{%endblock%}
+{%block body%}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg flex flex-col md:flex-row min-h-[300px]">
+        <!-- Profile Section -->
+        <div class="w-full md:w-2/6 bg-gray-100 flex flex-col items-center p-6">
+            <i class="em {{user.emoji_class}} w-20 h-20 p-1 rounded-full mb-4 ring-2 ring-gray-300 dark:ring-gray-500"></i>
+            <h2 class="text-lg font-semibold">{{user.get_first_name()}}</h2>
+            <h2 class="text-lg font-semibold">{{user.get_last_name()}}</h2>
+            <span class="link">
+  <a href="{{user.get_profile_url()}}" class="text-blue-500 hover:text-blue-700">
+    @{{user.username}}
+  </a>
+</span>
+
+
+            {%if user == current_user%}
+            <br>
+            <a href="/linkolearn/settings">
+                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                    <i class="fa fa-wrench"></i>
+                </button>
+            </a>
+            {%endif%}
+        </div>
+        <!-- Info Section -->
+        <div class="w-full md:w-4/6 flex flex-col flex-grow">
+            <!-- Top Section -->
+            <div class="p-6 border-b flex-grow">
+
+            </div>
+            <!-- Bottom Section -->
+            <div class="p-6 flex-grow">
+                <!-- Path and Section Selection -->
+  <div>
+    <label for="path-select">Choose a Path:</label>
+    <select id="path-select" onchange="loadSections()">
+      <option value="">Select a Path</option>
+    </select>
+  </div>
+  <div>
+    <label for="section-select">Choose a Section:</label>
+    <select id="section-select">
+      <option value="">Select a Section</option>
+    </select>
+  </div>
+
+  <script>
+
+    // DOM Elements
+    const pathSelect = document.getElementById('path-select');
+    const sectionSelect = document.getElementById('section-select');
+    const sharedLinkContainer = document.getElementById('shared-link-container');
+
+    // Fetch Paths
+    async function fetchPaths() {
+      const response = await fetch('{{url_for('linkolearn.get_paths')}}');
+      const paths = await response.json();
+      pathSelect.innerHTML = `
+        <option value="">Select a Path</option>
+        ${paths.map(path => `
+          <option value="${path.id}">${path.title}</option>
+        `).join('')}
+      `;
+    }
+
+    // Fetch Sections for a Path
+    async function loadSections() {
+      const pathId = pathSelect.value;
+      if (!pathId) return;
+
+      const response = await fetch(`/linkolearn/api/paths/${pathId}/sections`);
+      const sections = await response.json();
+      sectionSelect.innerHTML = `
+        <option value="">Select a Section</option>
+        ${sections.map(section => `
+          <option value="${section.id}">${section.title}</option>
+        `).join('')}
+      `;
+    }
+
+    // Handle Shared Links
+    window.addEventListener('DOMContentLoaded', async () => {
+      await fetchPaths();
+
+      // Extract shared data from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const sharedTitle = urlParams.get('title');
+      const sharedText = urlParams.get('text');
+      const sharedUrl = urlParams.get('url');
+
+      if (sharedUrl) {
+        // Display shared link details
+        sharedLinkContainer.innerHTML = `
+          <h2>Shared Link</h2>
+          <div class="link-item">
+            <h3>${sharedTitle || 'No Title'}</h3>
+            <p>${sharedText || ''}</p>
+            <a href="${sharedUrl}" target="_blank">${sharedUrl}</a>
+          </div>
+        `;
+
+        // Wait for user to select a path and section
+        const saveLink = async () => {
+          const sectionId = sectionSelect.value;
+          if (!sectionId) {
+            alert('Please select a section to save the link.');
+            return;
+          }
+
+          const response = await fetch('/save-link', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              url: sharedUrl,
+              section_id: sectionId,
+            }),
+          });
+
+          if (response.ok) {
+            console.log('Link saved successfully');
+            fetchUserLinks();
+          } else {
+            console.error('Failed to save link');
+          }
+        };
+
+        // Add a button to save the link after selecting a section
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save Link';
+        saveButton.onclick = saveLink;
+        document.body.appendChild(saveButton);
+      } else {
+        fetchUserLinks();
+      }
+    });
+
+
+  </script>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
