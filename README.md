@@ -73,3 +73,8 @@ Run
 shopyo initialise --no-clear-migration
 flask run --debug
 ```
+
+## Frontend
+
+
+Frontend files located at /static/themes/front/linkolearn_theme
