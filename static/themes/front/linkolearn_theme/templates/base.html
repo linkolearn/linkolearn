@@ -23,22 +23,30 @@
       gtag('config', 'G-YWMMBMPT7S');
     </script>
 
+
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/service-worker.js')
+                .then(reg => console.log('Service Worker Registered!', reg))
+                .catch(err => console.log('Service Worker Registration Failed!', err));
+        }
+    </script>
+
     <style type="text/css">
-        /* Ensure scrolling is enabled but scrollbar is hidden */
-html {
-  overflow: auto;
-  -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
-  scrollbar-width: none;  /* Hide scrollbar in Firefox */
-}
+        html {
+          overflow: auto;
+          -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
+          scrollbar-width: none;  /* Hide scrollbar in Firefox */
+        }
 
-/* Hide scrollbar in WebKit browsers (Chrome, Safari, Edge) */
-html::-webkit-scrollbar {
-  display: none;
-}
-
-
-
+        /* Hide scrollbar in WebKit browsers (Chrome, Safari, Edge) */
+        html::-webkit-scrollbar {
+          display: none;
+        }
     </style>
+
+
     {%block head%}{%endblock%}
 </head>
 
