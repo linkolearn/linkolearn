@@ -38,22 +38,27 @@
                     <!-- Links List -->
                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {% for path in current_user.get_bookmarked_paths() %}
-                        <div class="flex items-center gap-3 bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition cursor-pointer">
-                            <!-- Link (Only the text is clickable now) -->
-                            <a href="{{ path.get_url() }}" class="text-blue-600 font-medium hover:underline">
-                                {{ path.slug }}
+                            <a href="{{path.get_url()}}">
+                                <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <div class="flex items-center gap-4">
+                                        <i class="em {{path.path_user.emoji_class}} w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"></i>
+                                        <div class="font-medium dark:text-white">
+                                            <div class="text-left w-40 overflow-hidden whitespace-nowrap text-ellipsis">
+                                                {% if path.is_password_protected %}
+                                                <i class="fas fa-lock text-gray-500 text-sm"></i>
+                                                {%else%}
+                                                {% endif %}
+                                                {% if path.is_visible %}
+                                                {%else%}
+                                                <i class="fas fa-eye-slash text-gray-500 text-sm"></i>
+                                                {% endif %}
+                                            {{ path.slug }}</div>
+                                            <div class="text-left text-sm text-gray-500 dark:text-gray-400">{{path.path_user.username}}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </a>
-                            <!-- Lock Icon (Only appears if the link is protected) -->
-                            {% if path.is_password_protected %}
-                            <i class="fas fa-lock text-gray-500 text-sm"></i>
-                            {%else%}
-                            {% endif %}
-                            <!-- Lock Icon (Only appears if the link is protected) -->
-                            {% if path.is_visible %}
-                            {%else%}
-                            <i class="fas fa-eye-slash text-gray-500 text-sm"></i>
-                            {% endif %}
-                        </div>
+
                         {% endfor %}
                     </div>
                 </div>
