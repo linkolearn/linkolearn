@@ -8,6 +8,7 @@ from flask import flash
 from flask import Blueprint
 from flask import render_template
 from flask import session
+from flask import request
 
 #
 from shopyo.api.html import notify
@@ -18,6 +19,7 @@ from shopyo.api.html import notify
 # from modules.box__ecommerce.shop.helpers import get_cart_data
 
 from flask_login import current_user
+from flask_login import login_required
 from sqlalchemy import func
 
 from modules.box__linkolearn.linkolearn.models import Path
@@ -54,8 +56,8 @@ def index():
         try:
             paths = Path.query.all()
             paths = [p for p in paths if p.is_visible]
-            if len(paths) >= 5:
-                return paths[-6:-1]
+            if len(paths) >= 10:
+                return paths[-11:-1]
             else:
                 len_paths = len(paths) +1
                 return paths[:len_paths]
@@ -128,3 +130,25 @@ def about():
 @module_blueprint.route("/info")
 def info():
     return render_template("linkolearn_theme/templates/info.html")
+
+
+
+@module_blueprint.route("/save-link", methods=['GET', 'POST'])
+@login_required
+def save_link():
+    context = {'user': current_user}
+    if request.method == 'POST':
+        data = request.json
+        url = data.get('url')
+        section_id = data.get('section_id')
+
+        if not url or not section_id:
+            return jsonify({"error": "URL and section ID are required"}), 400
+
+        # Save the link to the database
+        new_link = Link(url=url, section_id=section_id)
+        db.session.add(new_link)
+        db.session.commit()
+
+        return jsonify({"message": "Link saved successfully"}), 200
+    return render_template("linkolearn_theme/templates/save_link.html", **context)

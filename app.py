@@ -44,6 +44,9 @@ from init import db
 from init import load_extensions
 from init import modules_path
 
+
+
+
 try:
     from init import installed_packages
 except ImportError:
@@ -77,6 +80,31 @@ def create_app(config_name="development"):
     from werkzeug.middleware.proxy_fix import ProxyFix
     from flask import request, jsonify
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+    from flask_socketio import SocketIO
+    socketio = SocketIO(app, cors_allowed_origins="*")
+    def get_country_code_from_ip(ip: str) -> str:
+        try:
+            # Setup
+            from ip3country import CountryLookup
+
+            lookup = CountryLookup()
+
+            # Lookup using ip4 str
+            return lookup.lookupStr(ip).lower() # 'KR'
+        except Exception as e:
+            with open('xxx.txt', 'w+') as f:
+                f.write(str(e))
+            pass
+
+        return "us"  # Default fallback code
+
+
+    @socketio.on("update_mouse")
+    def handle_mouse_update(data):
+        flag_code = get_country_code_from_ip(request.remote_addr)
+        data['flag'] = f'em-flag-{flag_code}'
+        socketio.emit("mouse_moved", data, to=None, include_self=False)  # Use 'to=None' for broadcasting
 
     load_plugins(app, global_template_variables, global_configs, config_name)
     load_config_from_obj(app, config_name)

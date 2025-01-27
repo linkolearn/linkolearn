@@ -38,6 +38,7 @@ def add():
     json_submit = request.get_json()
     # path_title = json_submit['path_title']
     path_link = json_submit['path_link']
+    path_link = Path.slugify(path_link)
     sections = json_submit['sections']
 
     if not path_link.strip():
