@@ -15,3 +15,6 @@ shopyo==4.12.1
 validators==0.18.2
 gunicorn
 markdown-it-py[linkify,plugins]
+ip3country
+Flask-SocketIO==5.5.1
+ip3country==0.3.0
