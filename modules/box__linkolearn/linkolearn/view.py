@@ -240,6 +240,7 @@ def edit_path(path_id):
         json_submit = request.get_json()
         # path_title = json_submit['path_title']
         path_link = json_submit['path_link']
+        path_link = Path.slugify(path_link)
         sections = json_submit['sections']
         path.sections = []
         # path.title = path_title
@@ -275,3 +276,18 @@ def edit_path(path_id):
 @login_required
 def bookmarks():
     return render_template('linkolearn_theme/templates/bookmarks.html')
+
+
+@module_blueprint.route("/api/paths", methods=["GET", "POST"])
+@login_required
+def get_paths():
+    user = current_user
+    paths = user.paths
+    return jsonify([{"id": path.id, "title": path.slug} for path in paths])
+
+
+@module_blueprint.route("/api/paths/<int:path_id>/sections", methods=['GET'])
+@login_required
+def get_sections(path_id):
+    sections = Section.query.filter_by(path_id=path_id).all()
+    return jsonify([{"id": section.id, "title": section.title} for section in sections])
