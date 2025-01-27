@@ -30,5 +30,5 @@
 <div class="flex justify-end">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="hidden" name="next" value="{{ request.args.get('next', '') }}"/>
-    <input type="submit" value="Submit" class="bg-[#ff8080] hover:bg-[#ff8080]/90 transition duration-200 cursor-pointer text-white font-bold py-2 px-4 rounded">
+    <input type="submit" value="Continue" class="bg-[#ff8080] hover:bg-[#ff8080]/90 transition duration-200 cursor-pointer text-white font-medium p-2 rounded w-full">
 </div>
