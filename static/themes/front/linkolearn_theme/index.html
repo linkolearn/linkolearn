@@ -2,6 +2,25 @@
 {%set active_page='home'%}
 {%block head%}
 <title>Learn by links</title>
+<style>
+.flag { 
+            position: absolute; 
+            font-size: 24px; 
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+        }
+/* Style for the cursor image */
+    .cursor-icon {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background-image: url("https://cdn-icons-png.flaticon.com/128/3771/3771677.png"); /* Cursor image */
+        background-size: contain;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        z-index: 999;
+    }
+</style>
 {%endblock%}
 {%block body%}
     <div class="max-w-screen-xl mx-auto px-4 p-8">
@@ -14,7 +33,7 @@
                     </a><br>
                 </div>
                 <p class="text-6xl font-bold">Organize links like a PRO</p><br><br>
-                <p class="text-xl">Opensource | Businesses | Personal</p><br><br>
+                <p class="text-xl">Opensource | Businesses | Personal </p><br><br>
                 <a href="{{url_for('new.index')}}">
                 <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900 rounded-full">Start creating</button>
 
@@ -114,6 +133,7 @@
 </div>
         
     </div>
+    {% if not current_user.is_authenticated %}
     <script>
     const form = document.getElementById('reg-form');
     const password1 = document.getElementById('password-1');
@@ -163,4 +183,87 @@
         }
     });
     </script>
+    {%endif%}
+        <!-- Include SocketIO library -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <script>
+    const socket = io();
+
+
+
+    socket.on("connect", () => {
+    console.log("✅ Connected to WebSocket Server");
+});
+
+socket.on("disconnect", () => {
+    console.log("❌ Disconnected from WebSocket Server");
+});
+
+
+
+socket.onAny((event, ...args) => {
+    console.log(`📡 Received event: ${event}`, args);
+});
+    const userFlag = "em-flag-bz";  // Change this dynamically if needed
+    const userId = Math.random().toString(36).substring(2, 9); // Unique user ID
+    const flags = {}; // Track flags for all users
+    let newCursor = document.createElement("span");
+    newCursor.classList.add("cursor-icon");
+
+    document.addEventListener("mousemove", (event) => {
+        socket.emit("update_mouse", {
+            id: userId,
+            x: event.clientX,
+            y: event.clientY,
+            flag: userFlag
+        });
+    });
+
+    socket.on("mouse_moved", (data) => {
+    console.log("Received mouse event:", data); // Debugging
+
+    if (!data.id || !data.flag) {
+        console.error("Missing required data fields:", data);
+        return;
+    }
+
+    let flagElement = flags[data.id];
+
+    if (!flagElement) {
+
+        console.log("Creating flag for user", data.id);  // Debugging
+
+        flagElement = document.createElement("i");
+        flagElement.classList.add("em", data.flag, "flag");
+        flagElement.setAttribute("aria-role", "presentation");
+        flagElement.setAttribute("aria-label", "Flag");
+
+        document.body.appendChild(flagElement);
+        flags[data.id] = flagElement;
+    }else {
+    console.log("Updating flag for user", data.id);
+
+    // Update flag position if provided
+    if (data.x !== undefined && data.y !== undefined) {
+        flagElement.style.position = "absolute";
+        flagElement.style.left = `${data.x}px`;
+        flagElement.style.top = `${data.y}px`;
+
+        var cx = Number(data.x) - 30;
+        var cy = Number(data.y) - 30;
+        newCursor.style.position = "absolute";
+        newCursor.style.left = `${cx}px`;
+        newCursor.style.top = `${cy}px`;
+    }
+
+    // Update flag type if changed
+    if (!flagElement.classList.contains(data.flag)) {
+        flagElement.classList.remove(...flagElement.classList);
+        flagElement.classList.add("em", data.flag, "flag");
+    }}
+});
+
+
+</script>
 {% endblock %}

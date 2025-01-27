@@ -52,7 +52,7 @@
   ],
   "share_target": {
     "action": "/save-link",
-    "method": "POST",
+    "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "title",
