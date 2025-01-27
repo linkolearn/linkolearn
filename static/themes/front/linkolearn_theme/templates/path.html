@@ -199,6 +199,19 @@
         </div>
     </div>
 </div>
+{%if not current_user.is_authenticated%}
+<br><br>
+<div class="fixed bottom-0 left-0 right-0 bg-blue-50 p-4 border-t border-blue-200">
+  <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-blue-900 text-center sm:text-left">
+      Want to create your own? <span class="font-semibold">Sign up in 10 seconds.</span>
+    </p>
+    <a href="/#reg-form" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors whitespace-nowrap">
+      Sign Up
+    </a>
+  </div>
+</div>
+{%endif%}
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
     {% if current_user == path.path_user %}
