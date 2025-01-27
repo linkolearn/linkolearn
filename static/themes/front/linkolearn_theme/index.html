@@ -203,28 +203,27 @@ socket.on("disconnect", () => {
 
 
 socket.onAny((event, ...args) => {
-    console.log(`📡 Received event: ${event}`, args);
+    // console.log(`📡 Received event: ${event}`, args);
 });
     const userFlag = "em-flag-bz";  // Change this dynamically if needed
     const userId = Math.random().toString(36).substring(2, 9); // Unique user ID
     const flags = {}; // Track flags for all users
-    let newCursor = document.createElement("span");
-    newCursor.classList.add("cursor-icon");
+    
 
     document.addEventListener("mousemove", (event) => {
         socket.emit("update_mouse", {
             id: userId,
-            x: event.clientX,
-            y: event.clientY,
+            x: event.pageX,
+            y: event.pageY,
             flag: userFlag
         });
     });
 
     socket.on("mouse_moved", (data) => {
-    console.log("Received mouse event:", data); // Debugging
+    // console.log("Received mouse event:", data); // Debugging
 
     if (!data.id || !data.flag) {
-        console.error("Missing required data fields:", data);
+        // console.error("Missing required data fields:", data);
         return;
     }
 
@@ -232,7 +231,8 @@ socket.onAny((event, ...args) => {
 
     if (!flagElement) {
 
-        console.log("Creating flag for user", data.id);  // Debugging
+        // console.log("Creating flag for user", data.id);  // Debugging
+
 
         flagElement = document.createElement("i");
         flagElement.classList.add("em", data.flag, "flag");
@@ -240,24 +240,20 @@ socket.onAny((event, ...args) => {
         flagElement.setAttribute("aria-label", "Flag");
 
         document.body.appendChild(flagElement);
+
+
+
         flags[data.id] = flagElement;
     }else {
-    console.log("Updating flag for user", data.id);
+    // console.log("Updating flag for user", data.id);
 
-    // Update flag position if provided
     if (data.x !== undefined && data.y !== undefined) {
         flagElement.style.position = "absolute";
         flagElement.style.left = `${data.x}px`;
         flagElement.style.top = `${data.y}px`;
 
-        var cx = Number(data.x) - 30;
-        var cy = Number(data.y) - 30;
-        newCursor.style.position = "absolute";
-        newCursor.style.left = `${cx}px`;
-        newCursor.style.top = `${cy}px`;
     }
 
-    // Update flag type if changed
     if (!flagElement.classList.contains(data.flag)) {
         flagElement.classList.remove(...flagElement.classList);
         flagElement.classList.add("em", data.flag, "flag");
