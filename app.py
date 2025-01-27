@@ -84,49 +84,16 @@ def create_app(config_name="development"):
     from flask_socketio import SocketIO
     socketio = SocketIO(app, cors_allowed_origins="*")
     def get_country_code_from_ip(ip: str) -> str:
-        def query_whois(server: str, ip: str) -> str:
-            try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.settimeout(3)
-                    s.connect((server, 43))
-                    s.send(f"{ip}\r\n".encode())
-                    response = b""
-                    while True:
-                        data = s.recv(4096)
-                        if not data:
-                            break
-                        response += data
-                    return response.decode("utf-8", "ignore")
-            except:
-                return ""
+        try:
+            # Setup
+            from ip3country import CountryLookup
 
-        # First determine which WHOIS server to query
-        raw = query_whois("whois.iana.org", ip)
-        rir_server = None
-        for line in raw.splitlines():
-            if "refer" in line.lower():
-                parts = line.split()
-                if len(parts) > 1:
-                    rir_server = parts[-1]
-                    break
+            lookup = CountryLookup()
 
-        # Query the appropriate Regional Internet Registry (RIR)
-        if rir_server:
-            raw = query_whois(rir_server, ip)
-            
-            # Try to find country code patterns in WHOIS data
-            patterns = [
-                r"country:\s+([A-Z]{2})",       # RIPE/APNIC format
-                r"RegCountry:\s+([A-Z]{2})",    # ARIN format
-                r"Country:\s+([A-Z]{2})",       # Common pattern
-                r"country code:\s+([A-Z]{2})",  # Alternate pattern
-                r"CountryCode:\s+([A-Z]{2})"    # Some registries
-            ]
-            
-            for pattern in patterns:
-                match = re.search(pattern, raw, re.IGNORECASE)
-                if match:
-                    return match.group(1).upper()
+            # Lookup using ip4 str
+            return lookup.lookupStr(ip).lower() # 'KR'
+        except:
+            pass
 
         return "us"  # Default fallback code
 
