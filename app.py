@@ -94,7 +94,7 @@ def create_app(config_name="development"):
             return lookup.lookupStr(ip).lower() # 'KR'
         except Exception as e:
             with open('xxx.txt', 'w+') as f:
-                f.write(e)
+                f.write(str(e))
             pass
 
         return "us"  # Default fallback code
