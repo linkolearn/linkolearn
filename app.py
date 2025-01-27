@@ -82,7 +82,7 @@ def create_app(config_name="development"):
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     from flask_socketio import SocketIO
-    socketio = SocketIO(app, cors_allowed_origins="*")
+    socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
     def get_country_code_from_ip(ip: str) -> str:
         def query_whois(server: str, ip: str) -> str:
             try:
