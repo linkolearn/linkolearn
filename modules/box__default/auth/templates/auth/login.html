@@ -32,16 +32,15 @@
 {% endblock %}
 {% block content %}
 
-	<div class="container col-md-6 off-set-2 text-center">
+	<div class="grid h-full w-full place-items-center bg-gradient-to-br to-[#ff8080]/40 via-[#ff8080]/5 from-white">
+		<div class="bg-white/50 border-[#ff8080]/10 border-2 rounded-lg w-full max-w-md p-8">
+			<div class="mb-4 text-center">
+				<a href="/"><img src="/static/linkolearn.svg" width="50" height="auto" class="object-contain mx-auto"></a>
+			</div>
+			<form action="{{url_for('auth.login')}}" method="POST">
+				{% include 'auth/blocks/login_form.html' %}
+			</form>
+		</div>
+	</div>
         
-        <div class="card">
-            <div class="card-body">
-                <a href="/"><img src="/static/linkolearn.svg" width="175" height="150"></a>
-                <form action="{{url_for('auth.login')}}" method="POST">
-                    {%include 'auth/blocks/login_form.html'%}
-                </form>
-            </div>
-        </div>
-        
-             
 {% endblock %}
