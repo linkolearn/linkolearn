@@ -188,7 +188,10 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
     <script>
-    const socket = io();
+    const socket = io({
+        transports: ["websocket"],  // Only use WebSocket (no polling)
+        upgrade: true
+    });
 
 
 
