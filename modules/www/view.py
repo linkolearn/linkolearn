@@ -23,7 +23,10 @@ from flask_login import login_required
 from sqlalchemy import func
 
 from modules.box__linkolearn.linkolearn.models import Path
+from modules.box__linkolearn.linkolearn.models import Link
 from modules.box__default.auth.models import User
+from flask import jsonify
+from init import db 
 
 dirpath = os.path.dirname(os.path.abspath(__file__))
 module_info = {}
@@ -131,24 +134,30 @@ def about():
 def info():
     return render_template("linkolearn_theme/templates/info.html")
 
-
+import validators
 
 @module_blueprint.route("/save-link", methods=['GET', 'POST'])
 @login_required
 def save_link():
     context = {'user': current_user}
     if request.method == 'POST':
-        data = request.json
+        data = request.form
+
+
         url = data.get('url')
         section_id = data.get('section_id')
-
+        print(url, section_id)
         if not url or not section_id:
-            return jsonify({"error": "URL and section ID are required"}), 400
+            return "URL and section ID are required"
+
+        if not validators.url(url):
+            return "Not valid url"
 
         # Save the link to the database
         new_link = Link(url=url, section_id=section_id)
         db.session.add(new_link)
         db.session.commit()
 
-        return jsonify({"message": "Link saved successfully"}), 200
+        profile_url = current_user.get_profile_url()
+        return f"Link <{url}> saved successfully <a href='{profile_url}'>Return to profile</a>"
     return render_template("linkolearn_theme/templates/save_link.html", **context)

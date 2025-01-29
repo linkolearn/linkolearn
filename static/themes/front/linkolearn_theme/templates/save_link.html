@@ -1,7 +1,7 @@
 {%set active_page='profile'%}
 {%extends 'linkolearn_theme/templates/base.html'%}
 {%block head%}
-<title>{{user.username}}</title>
+<title>Save link</title>
 {%endblock%}
 {%block body%}
 <div class="max-w-screen-xl mx-auto px-4 p-8">
@@ -36,18 +36,34 @@
             <!-- Bottom Section -->
             <div class="p-6 flex-grow">
                 <!-- Path and Section Selection -->
-  <div>
-    <label for="path-select">Choose a Path:</label>
-    <select id="path-select" onchange="loadSections()">
-      <option value="">Select a Path</option>
-    </select>
-  </div>
-  <div>
-    <label for="section-select">Choose a Section:</label>
-    <select id="section-select">
-      <option value="">Select a Section</option>
-    </select>
-  </div>
+        <div id="shared-link-container">
+          
+        </div>
+        <div>
+          <label for="path-select">Choose a Path:</label>
+          <select id="path-select" onchange="loadSections()">
+            <option value="">Select a Path</option>
+          </select>
+        </div>
+        <div>
+          <label for="section-select">Choose a Section:</label>
+          <select id="section-select">
+            <option value="">Select a Section</option>
+          </select>
+        </div>
+        <br>
+        <form id="save-link-form" action="/save-link" method="POST">
+          <input id="form-url" type="text" name="url" value="https://example.com" 
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+          required>
+          <input type="hidden" id="form-section" type="text" name="section_id" value="" 
+          required>
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}" required>
+          <br>
+          <button id="form-save" type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Save Link</button>
+        </form>
+
+        <div id="output"></div>
 
   <script>
 
@@ -95,50 +111,18 @@
 
       if (sharedUrl) {
         // Display shared link details
-        sharedLinkContainer.innerHTML = `
-          <h2>Shared Link</h2>
-          <div class="link-item">
-            <h3>${sharedTitle || 'No Title'}</h3>
-            <p>${sharedText || ''}</p>
-            <a href="${sharedUrl}" target="_blank">${sharedUrl}</a>
-          </div>
-        `;
 
-        // Wait for user to select a path and section
-        const saveLink = async () => {
-          const sectionId = sectionSelect.value;
-          if (!sectionId) {
-            alert('Please select a section to save the link.');
-            return;
-          }
+        document.querySelector('#form-url').value = sharedUrl;
 
-          const response = await fetch('/save-link', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              url: sharedUrl,
-              section_id: sectionId,
-            }),
-          });
-
-          if (response.ok) {
-            console.log('Link saved successfully');
-            fetchUserLinks();
-          } else {
-            console.error('Failed to save link');
-          }
-        };
-
-        // Add a button to save the link after selecting a section
-        const saveButton = document.createElement('button');
-        saveButton.textContent = 'Save Link';
-        saveButton.onclick = saveLink;
-        document.body.appendChild(saveButton);
       } else {
         fetchUserLinks();
       }
+    });
+
+
+    document.getElementById("section-select").addEventListener("change", function () {
+      const selectedValue = this.value;
+      document.getElementById("form-section").value = selectedValue;
     });
 
 
