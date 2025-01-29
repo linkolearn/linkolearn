@@ -12,6 +12,7 @@ from init import db
 
 import re
 from markdown_it import MarkdownIt
+from slugify import slugify as slugify_func
 
 
 class Path(PkModel):
@@ -83,10 +84,7 @@ class Path(PkModel):
         return {} 
 
     def slugify(title):
-        title = title.lower()
-        title = re.sub(r'[^a-z0-9\s]', '', title)
-        title = re.sub(r'\s+', '-', title)
-        return title
+        return slugify_func(title)
 
 
 like_list_user_bridge = db.Table(
