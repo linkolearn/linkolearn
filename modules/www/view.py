@@ -9,7 +9,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import session
 from flask import request
-
+from flask import flash
 #
 from shopyo.api.html import notify
 # from shopyo.api.forms import flash_errors
@@ -71,6 +71,7 @@ def index():
         'get_last_5': get_last_5,
         'current_user': current_user
     }
+
 
     return render_template("linkolearn_theme/index.html", **context)
 
