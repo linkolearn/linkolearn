@@ -182,7 +182,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash(notify_success("Successfully logged out"))
+    flash("Successfully logged out")
 
     if "next" not in request.args:
         next_url = url_for("www.index")

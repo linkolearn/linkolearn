@@ -1,15 +1,39 @@
 <div id="flashed-messages" class="fixed top-5 right-5 z-50 space-y-2">
-  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
-        <div class="max-w-xs px-4 py-3 rounded-md shadow-md flex items-center text-sm font-medium 
-          {% if category == 'success' %} bg-green-600 text-white {% elif category == 'error' %} bg-red-600 text-white 
-          {% elif category == 'warning' %} bg-yellow-600 text-black {% elif category == 'info' %} bg-blue-600 text-white {% else %} bg-gray-700 text-white {% endif %}">
-          <i class="mr-2 {% if category == 'success' %} fa fa-check-circle {% elif category == 'error' %} fa fa-times-circle 
-          {% elif category == 'warning' %} fa fa-exclamation-triangle {% elif category == 'info' %} fa fa-info-circle {% else %} fa fa-bell {% endif %}"></i>
-          <span>{{ message | safe }}</span>
+        <div class="max-w-xs px-4 py-3 rounded-md shadow-md flex items-center text-sm font-medium relative
+            {% if category == 'success' %} 
+              bg-green-600 text-white 
+            {% elif category == 'error' %} 
+              bg-red-600 text-white 
+            {% elif category == 'warning' %} 
+              bg-yellow-600 text-black 
+            {% elif category == 'info' %} 
+              bg-blue-600 text-white 
+            {% else %} 
+              bg-gray-700 text-white 
+            {% endif %}">
+          <i class="mr-2 
+            {% if category == 'success' %} 
+              fa fa-check-circle 
+            {% elif category == 'error' %} 
+              fa fa-times-circle 
+            {% elif category == 'warning' %} 
+              fa fa-exclamation-triangle 
+            {% elif category == 'info' %} 
+              fa fa-info-circle 
+            {% else %} 
+              fa fa-bell 
+            {% endif %}"></i>
+          <span class="flex-1">{{ message | safe }}</span>
+          
+          <!-- Close Button -->
+          <button class="ml-4 text-white hover:text-gray-300 focus:outline-none" onclick="this.parentElement.remove();">
+            <i class="fa fa-times"></i>
+          </button>
         </div>
       {% endfor %}
     {% endif %}
-  {% endwith %}
+    {% endwith %}
 </div>
