@@ -2,124 +2,161 @@
 {%set active_page='home'%}
 {%block head%}
 <title>Learn by links</title>
-<style>
-.flag { 
-            position: absolute; 
-            font-size: 24px; 
-            pointer-events: none;
-            transform: translate(-50%, -100%);
-        }
-/* Style for the cursor image */
-    .cursor-icon {
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        background-image: url("https://cdn-icons-png.flaticon.com/128/3771/3771677.png"); /* Cursor image */
-        background-size: contain;
-        background-repeat: no-repeat;
-        pointer-events: none;
-        z-index: 999;
-    }
-</style>
+  <style>
+.carousel {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  min-height: 400px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  width: 300%; /* Desktop width */
+  height: 100%;
+  animation: slideshow 12s infinite;
+}
+
+.slide {
+  width: 33.333%; /* Desktop slides fit */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Slideshow animation for desktop */
+@keyframes slideshow {
+  0%, 26% {
+    transform: translateX(0);
+  }
+  33%, 59% {
+    transform: translateX(-33.333%);
+  }
+  66%, 92% {
+    transform: translateX(-66.666%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Pause animation on hover */
+.carousel:hover .slides {
+  animation-play-state: paused;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+  .slides {
+    width: 100%; /* Ensure slides take full width */
+    flex-direction: column;
+    animation: none; /* Remove auto animation on mobile */
+  }
+
+  .slide {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+  </style>
 {%endblock%}
 {%block body%}
-    <div class="max-w-screen-xl mx-auto px-4 p-8">
-
-        <div class="flex flex-col md:flex-row items-center justify-between">
-            <div class="text-left md:w-1/2">
-<!--                 <div class="block md:hidden">
-                    <a href="https://www.producthunt.com/posts/contriblearn?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank">
-                        <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
-                    </a><br>
-                </div> -->
-                <p class="text-6xl font-bold">Create courses using links!</p><br><br>
-                <p class="text-xl">See <a href="/appinv/lumosql" class="underline">an example and the story behind</a>! </p><br><br>
-                <a href="{{url_for('new.index')}}">
-                <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900 rounded-full">Start creating</button>
-
-              </a>
-              <br><br>V2 launches <a href="https://www.producthunt.com/products/contriblearn#contriblearn" target="_blank" class="underline">(previous 119)</a><br><br>
-                <a href="https://www.producthunt.com/posts/linkversity?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-linkversity" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=799515&theme=light&t=1737451180237" alt="Linkversity - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly&#0032;using&#0032;OpenSource | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-                <br>
-                <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#f57380', 'S6S2GDNC7');kofiwidget2.draw();</script> 
-            </div>
-            <div class="flex justify-center w-full md:w-1/2 mt-8 md:mt-0">
-                <img src="{{url_for('static', filename='organize_linkversity.svg')}}" alt="Description" class="w-full">
-            </div>
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="text-left md:w-1/2">
+            {% if current_user.is_authenticated %}
+            <!-- You ARE LOGGED IN!!!<br>Enjoy! -->
+ <div class="carousel bg-white hidden sm:block">
+    <div class="slides">
+      <div class="slide">
+        <div class="flex flex-col items-center w-full max-w-md mx-auto px-4">
+          <img src="{{url_for('static', filename='discover_linkversity.svg')}}" alt="Image 1" class="w-32 h-32 rounded-full mb-4">
+          <p class="text-xl md:text-2xl font-semibold text-center m-4">Discover useful collections</p>
+          <p class="text-sm md:text-base text-center">Discover what people have created and bookmark them!</p>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="flex flex-col items-center w-full max-w-md mx-auto px-4">
+          <img src="{{url_for('static', filename='collab_linkversity.svg')}}" alt="Image 2" class="w-32 h-32 rounded-full mb-4">
+          <p class="text-xl md:text-2xl font-semibold text-center m-4">Collaborate with teams</p>
+          <p class="text-sm md:text-base text-center">Allow your friends to add links to collections for serious works</p>
+        </div>
+      </div>
+      <div class="slide">
+        <div class="flex flex-col items-center w-full max-w-md mx-auto px-4">
+          <img src="{{url_for('static', filename='security_linkversity.svg')}}" alt="Image 3" class="w-32 h-32 rounded-full mb-4">
+          <p class="text-xl md:text-2xl font-semibold text-center m-4">Protect your links</p>
+          <p class="text-sm md:text-base text-center">With varying levels of privacy, you can restrict access. Set visibility and password-protect collections</p>
+        </div>
+      </div>
+    </div>
+  </div>
+            {% else %}
+            <form id="reg-form" action="{{ url_for('auth.register') }}" method="post" class="flex flex-col md:flex-row items-center justify-center space-x-6 md:space-x-4 space-y-6 md:space-y-0">
+                <div class="flex-1 max-w-lg space-y-6">
+                    <!-- Register Form -->
+                    {% include 'auth/blocks/register_form.html' %}
+                    <span id="message" class="text-red-500"></span>
+                    <button type="submit" class="bg-red-600 text-white py-3 px-6 rounded-lg w-full hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 mt-4">
+                        Register </button>
+                </div> <!-- Illustration Section -->
+            </form>
+            {% endif %}
+        </div>
+        <div class="flex justify-center w-full md:w-1/2 mt-8 md:mt-0">
+            <p class="text-xl">
+                <span class="text-3xl font-bold">Linkversity allows people to create courses from links around the internet. </span><br><br>
+                Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.<br><br>
+                It is particularly useful for the <span class="bg-yellow-200">Education</span>
+                sector and <span class="bg-yellow-200">OpenSource</span> projects to get
+                contributors started quickly. It can be used as a
+                <span class="bg-yellow-200">knowledge base</span>. It was inspired by works done on
+                <a href="/appinv/lumosql" class="underline">LumoSQL</a><br><br>
+                It can also be used as a research bookmark manager!<br><br>
+                - Emails no longer needed!<br><br>
+                <a href="https://www.producthunt.com/posts/contriblearn?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-contriblearn" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=412345&theme=light&t=1738394199733" alt="Contriblearn - Onboard&#0032;people&#0032;to&#0032;codebases&#0032;quickly | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+            </p>
         </div>
     </div>
+</div>
 
-    <br><br>
-    <div class="max-w-screen-xl mx-auto px-4 p-8">
-        {% if current_user.is_authenticated %}
-        <!-- You ARE LOGGED IN!!!<br>Enjoy! -->
-        {% else %}
-        <form id="reg-form" action="{{ url_for('auth.register') }}" method="post" class="flex flex-col md:flex-row items-center justify-center space-x-6 md:space-x-4 space-y-6 md:space-y-0">
-            <div class="flex-1 max-w-lg space-y-6">
-                <p class="text-3xl font-semibold text-gray-800">Warp in please ...</p>
-                <!-- Register Form -->
-                {% include 'auth/blocks/register_form.html' %}
-                <span id="message" class="text-red-500"></span>
-                <button type="submit" class="bg-red-600 text-white py-3 px-6 rounded-lg w-full hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 mt-4">
-                    Register </button> </div> <!-- Illustration Section -->
-                        <div class="hidden md:block flex-1 max-w-sm">
-                            <img src="{{url_for('static', filename='ufo_linkversity.svg')}}" alt="Registration Illustration" class="">
-                        </div>
-        </form>
-        {% endif %}
-    </div>
-
-    <div class="max-w-screen-xl mx-auto px-4 p-8">
-        <div class="flex flex-col md:flex-row items-center justify-between">
-            <div class="flex justify-center w-full md:w-1/3">
-                <img src="{{url_for('static', filename='rocket_linkversity.svg')}}" alt="Description" class="w-full">
-            </div>
-            <div class="text-left w-full md:w-2/3 p-8 m-8">
-                <p class="text-4xl font-bold">A tool to ramp up quickly on a topic</p><br><br>
-                <p class="text-xl">Linkversity allows people to create courses from links around the internet.
-                    Want to send preparation materials to someone? Take a few minutes, gather your links and send the person the course's content.
-
-                    <br><br>
-
-                    And it's <a target="_blank" href="https://github.com/linkversity/linkversity" class="underline">OpenSource</a>
-                  </p><br><br>
-
-            </div>
+{% if not current_user.is_authenticated %}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="flex flex-col md:flex-row justify-between gap-8">
+        <!-- Item 1 -->
+        <div class="flex flex-col items-center w-full md:w-1/3">
+            <img src="{{url_for('static', filename='discover_linkversity.svg')}}" alt="Image 1" class="w-32 h-32 rounded-full mb-4">
+            <p class="text-2xl font-semibold m-4">Discover useful collections</p>
+            <p class="text-base">Discover what people have created and bookmark them!</p>
+        </div>
+        <!-- Item 2 -->
+        <div class="flex flex-col items-center w-full md:w-1/3">
+            <img src="{{url_for('static', filename='collab_linkversity.svg')}}" alt="Image 2" class="w-32 h-32 rounded-full mb-4">
+            <p class="text-2xl font-semibold m-4">Collaborate with teams</p>
+            <p class="text-base">Allow your friends to add links to collections for serious works</p>
+        </div>
+        <!-- Item 3 -->
+        <div class="flex flex-col items-center w-full md:w-1/3">
+            <img src="{{url_for('static', filename='security_linkversity.svg')}}" alt="Image 3" class="w-32 h-32 rounded-full mb-4">
+            <p class="text-2xl font-semibold m-4">Protect your links</p>
+            <p class="text-base">With varying levels of privacy, you can restrict access. Set visibility and password-protect collections</p>
         </div>
     </div>
-
-    <br><br>
-    <div class="max-w-screen-xl mx-auto px-4 p-8">
-        <div class="flex flex-col md:flex-row justify-between gap-8">
-            <!-- Item 1 -->
-            <div class="flex flex-col items-center w-full md:w-1/3">
-                <img src="{{url_for('static', filename='discover_linkversity.svg')}}" alt="Image 1" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold m-4">Discover useful collections</p>
-                <p class="text-base">Discover what people have created and bookmark them!</p>
-            </div>
-            <!-- Item 2 -->
-            <div class="flex flex-col items-center w-full md:w-1/3">
-                <img src="{{url_for('static', filename='collab_linkversity.svg')}}" alt="Image 2" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold m-4">Collaborate with teams</p>
-                <p class="text-base">Allow your friends to add links to collections for serious works</p>
-            </div>
-            <!-- Item 3 -->
-            <div class="flex flex-col items-center w-full md:w-1/3">
-                <img src="{{url_for('static', filename='security_linkversity.svg')}}" alt="Image 3" class="w-32 h-32 rounded-full mb-4">
-                <p class="text-2xl font-semibold m-4">Protect your links</p>
-                <p class="text-base">With varying levels of privacy, you can restrict access. Set visibility and password-protect collections</p>
-            </div>
-        </div>
-    </div>
-    
-
-    <div class="max-w-screen-xl mx-auto px-4 p-8">
-      <div class="text-center py-12">
-    <h2 class="text-4xl font-bold text-gray-800 m-4">
-        Explore latest
-    </h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+</div>
+{%endif%}
+<div class="max-w-screen-xl mx-auto px-4 p-8">
+    <div class="text-center py-12">
+        <h2 class="text-4xl font-bold text-gray-800 m-4">
+            Explore latest
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {%for path in get_last_5()%}
             <a href="{{path.get_url()}}">
                 <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -134,104 +171,93 @@
             </a>
             {%endfor%}
         </div>
-</div>
-        
     </div>
-
-    <div class="max-w-4xl mx-auto px-6 py-10 text-gray-900">
-      <h2 class="text-center text-4xl font-bold mb-12 tracking-tight">What People Say</h2>
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
-        
+</div>
+<div class="max-w-4xl mx-auto px-6 py-10 text-gray-900">
+    <h2 class="text-center text-4xl font-bold mb-12 tracking-tight">What People Say</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
         <!-- Testimonial 1 -->
         <div class="relative">
-          <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
-          <p class="text-lg text-gray-800 leading-relaxed pl-6">
-            “Linkversity.xyz is incredibly useful! It allows me to store all my important links in one place, making it super easy to access them whenever I need. I also love the option to share my links with others. This site has definitely made my life more organized! Highly recommend!”
-          </p>
-          <div class="mt-4 pl-6">
-            <span class="block font-semibold text-blue-600 text-lg">-- Ouwesh Seeroo</span>
-          </div>
+            <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
+            <p class="text-lg text-gray-800 leading-relaxed pl-6">
+                “Linkversity.xyz is incredibly useful! It allows me to store all my important links in one place, making it super easy to access them whenever I need. I also love the option to share my links with others. This site has definitely made my life more organized! Highly recommend!”
+            </p>
+            <div class="mt-4 pl-6">
+                <span class="block font-semibold text-blue-600 text-lg">-- Ouwesh Seeroo</span>
+            </div>
         </div>
-
         <!-- Testimonial 2 -->
         <div class="relative">
-          <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
-          <p class="text-lg text-gray-800 leading-relaxed pl-6">
-            “Very useful
-    It helps me to save my links in one place which makes it easier for me to find them anytime. Im also happy to be able to share my links with others also. I ❤ this app”
-          </p>
-          <div class="mt-4 pl-6">
-            <span class="block font-semibold text-blue-600 text-lg">-- SSidd</span>
-
-          </div>
+            <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
+            <p class="text-lg text-gray-800 leading-relaxed pl-6">
+                “Very useful
+                It helps me to save my links in one place which makes it easier for me to find them anytime. Im also happy to be able to share my links with others also. I ❤ this app”
+            </p>
+            <div class="mt-4 pl-6">
+                <span class="block font-semibold text-blue-600 text-lg">-- SSidd</span>
+            </div>
         </div>
-
         <!-- Testimonial 3 -->
         <div class="relative sm:col-span-2">
-          <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
-          <p class="text-lg text-gray-800 leading-relaxed pl-6">
-            “A very useful app.”
-          </p>
-          <div class="mt-4 pl-6">
-            <span class="block font-semibold text-blue-600 text-lg">-- Randy Duodu</span>
-          </div>
+            <i class="fas fa-quote-left text-3xl text-blue-500 absolute -top-2 -left-4"></i>
+            <p class="text-lg text-gray-800 leading-relaxed pl-6">
+                “A very useful app.”
+            </p>
+            <div class="mt-4 pl-6">
+                <span class="block font-semibold text-blue-600 text-lg">-- Randy Duodu</span>
+            </div>
         </div>
-
-      </div>
     </div>
+</div>
+{% if not current_user.is_authenticated %}
+<script>
+const form = document.getElementById('reg-form');
+const password1 = document.getElementById('password-1');
+const password2 = document.getElementById('password-2');
+const message = document.getElementById('message');
 
-    {% if not current_user.is_authenticated %}
-    <script>
-    const form = document.getElementById('reg-form');
-    const password1 = document.getElementById('password-1');
-    const password2 = document.getElementById('password-2');
-    const message = document.getElementById('message');
 
+// Optional: Provide live feedback as the user types
+password2.addEventListener('input', function() {
+    if (password1.value === password2.value) {
+        // message.textContent = "Passwords match!";
+        // message.className = "success";
 
-    // Optional: Provide live feedback as the user types
-    password2.addEventListener('input', function() {
-        if (password1.value === password2.value) {
-            // message.textContent = "Passwords match!";
-            // message.className = "success";
-
-            elements = document.getElementsByClassName('password');
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = "#54fc7b";
-            }
-
-        } else {
-            // message.textContent = "Passwords do not match.";
-            // message.className = "error";
-            elements = document.getElementsByClassName('password');
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = "#ff9292";
-            }
-
+        elements = document.getElementsByClassName('password');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "#54fc7b";
         }
-    });
-    password1.addEventListener('input', function() {
-        if (password1.value === password2.value) {
-            // message.textContent = "Passwords match!";
-            // message.className = "success";
 
-            elements = document.getElementsByClassName('password');
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = "#54fc7b";
-            }
-
-        } else {
-            // message.textContent = "Passwords do not match.";
-            // message.className = "error";
-            elements = document.getElementsByClassName('password');
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = "#ff9292";
-            }
-
+    } else {
+        // message.textContent = "Passwords do not match.";
+        // message.className = "error";
+        elements = document.getElementsByClassName('password');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "#ff9292";
         }
-    });
-    </script>
-    {%endif%}
 
-  
+    }
+});
+password1.addEventListener('input', function() {
+    if (password1.value === password2.value) {
+        // message.textContent = "Passwords match!";
+        // message.className = "success";
+
+        elements = document.getElementsByClassName('password');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "#54fc7b";
+        }
+
+    } else {
+        // message.textContent = "Passwords do not match.";
+        // message.className = "error";
+        elements = document.getElementsByClassName('password');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.backgroundColor = "#ff9292";
+        }
+
+    }
+});
+</script>
+{%endif%}
 {% endblock %}
